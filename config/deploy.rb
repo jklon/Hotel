@@ -40,7 +40,7 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app,:web), in: :sequence, wait: 5 do
-      execute "service thin restart" 
+      # execute "service thin restart" 
     end
   end
 
@@ -54,3 +54,4 @@ namespace :deploy do
   end
 
 end
+after 'deploy:publishing', 'thin:restart'
