@@ -1,6 +1,6 @@
 ---
 address: 127.0.0.1
-# pid: /tmp/thin.pid
+pid: /tmp/thin.pid
 timeout: 30
 wait: 30
 max_conns: 1024
