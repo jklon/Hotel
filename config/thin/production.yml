@@ -1,0 +1,13 @@
+---
+address: 127.0.0.1
+pid: /tmp/thin.pid
+timeout: 30
+wait: 30
+log: /tmp/log/thin.log
+max_conns: 1024
+environment: production
+max_persistent_conns: 512
+servers: 4
+daemonize: true
+port: 4000
+onebyone: true
