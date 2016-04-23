@@ -33,7 +33,7 @@ set :ssh_options, {:keys => %w(~/.ssh/aws-ashoka.pem)}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 2
 
 namespace :deploy do
 
@@ -55,3 +55,4 @@ namespace :deploy do
 
 end
 after 'deploy:publishing', 'thin:restart'
+
