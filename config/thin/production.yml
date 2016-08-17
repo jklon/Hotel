@@ -1,5 +1,5 @@
 ---
-address: 0.0.0.0
+address: 127.0.0.1
 pid: /tmp/pids/thin.pid
 timeout: 30
 wait: 30
