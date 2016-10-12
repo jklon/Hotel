@@ -4,11 +4,13 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password: ankit
+  password: 
   host: localhost
 
 development:
   <<: *default
+  username: root
+  password: 
   database: hotel_development
 
 # Warning: The database defined as "test" will be erased and
@@ -20,4 +22,6 @@ test:
 
 production:
   <<: *default
+  username: hotel
+  password: ankit
   database: hotel_production
