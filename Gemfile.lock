@@ -135,8 +135,12 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     ref (2.0.0)
+    rubyXL (3.3.22)
+      nokogiri (>= 1.4.4)
+      rubyzip (>= 1.1.6)
     ruby_parser (3.8.1)
       sexp_processor (~> 4.1)
+    rubyzip (1.2.0)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -187,6 +191,7 @@ DEPENDENCIES
   jquery-rails
   mysql2 (~> 0.3.18)
   rails (= 4.2.4)
+  rubyXL
   sdoc (~> 0.4.0)
   spring
   therubyracer

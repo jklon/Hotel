@@ -1,0 +1,13 @@
+%h3 Chapters
+%table.table
+  %tr
+    %th Name
+    %th Chapter number
+    %th Subject
+    %th Standard
+  - @chapters.each do |s|
+    %tr
+      %td= s.name
+      %td= s.chapter_number
+      %td= s.subject.full_name
+      %td= s.standard.name
