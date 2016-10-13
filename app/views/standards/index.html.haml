@@ -1,2 +1,11 @@
-%h1 Standards#index
-%p Find me in app/views/standards/index.html.haml
+%h3 Standards
+%table.table
+  %tr
+    %th Name
+    %th Standard number
+    %th Board
+  - @standards.each do |s|
+    %tr
+      %td= s.name
+      %td= s.standard_number
+      %td= s.board

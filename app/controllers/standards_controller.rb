@@ -1,5 +1,6 @@
 class StandardsController < ApplicationController
   def index
+    @standards = Standard.all
   end
 
   def edit

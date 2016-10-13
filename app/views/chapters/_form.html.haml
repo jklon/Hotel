@@ -1,0 +1,15 @@
+= form_for @chapter do |f|
+  .field
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .field
+    = f.label :chapter_number
+    = f.text_field :chapter_number, class: 'form-control'
+  .field
+    = f.label :standard
+    = f.select :standard_id, Standard.all.collect { |p| [ p.name, p.id ] }, include_blank: true
+  .field
+    = f.label :subject
+    = f.select :subject_id, Subject.all.collect { |p| [ p.full_name, p.id ] }, include_blank: true
+  
+  = f.submit 'Save'

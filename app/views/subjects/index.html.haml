@@ -1,2 +1,13 @@
-%h1 Subjects#index
-%p Find me in app/views/subjects/index.html.haml
+%h3 Subjects
+%table.table
+  %tr
+    %th Name
+    %th Full name
+    %th Description
+    %th Class
+  - @subjects.each do |s|
+    %tr
+      %td= s.name
+      %td= s.full_name
+      %td= s.description
+      %td= s.standard.name
