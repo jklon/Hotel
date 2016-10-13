@@ -22,6 +22,5 @@ test:
 
 production:
   <<: *default
-  username: hotel
   password: ankit
   database: hotel_production
