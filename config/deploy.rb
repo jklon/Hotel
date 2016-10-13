@@ -39,8 +39,11 @@ namespace :deploy do
 
   desc 'Restart application'
   task :restart do
-    on roles(:app,:web), in: :sequence, wait: 5 do
-      # execute "service thin restart" 
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        #execute :bundle, "exec rake assets:precompile"
+        execute :bundle, "exec thin restart -C config/thin/production.yml -o 0"
+      end
     end
   end
 
@@ -55,4 +58,6 @@ namespace :deploy do
 
 end
 after 'deploy:publishing', 'thin:restart'
-
+after "bundle:install" do
+  run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
+end
