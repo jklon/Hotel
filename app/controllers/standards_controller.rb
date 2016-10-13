@@ -27,7 +27,7 @@ class StandardsController < ApplicationController
 
   private
   def standard_params
-    params.require(:standard).permit(:name, :standard_number, :board)
+    params.require(:standard).permit(:name, :standard_number, :board, :code)
   end
 
 end
