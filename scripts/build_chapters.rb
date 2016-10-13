@@ -1,6 +1,6 @@
 require 'rubyXL'
 
-book = RubyXL::Parser.parse('/Users/neeraj/Documents/Mathematics_Paths.xlsx')
+book = RubyXL::Parser.parse('/home/ec2-user/Mathematics_Paths.xlsx')
 master_sheet = book[0]
 
 count = 0
