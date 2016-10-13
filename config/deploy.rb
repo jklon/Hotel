@@ -37,6 +37,11 @@ set :keep_releases, 2
 
 namespace :deploy do
 
+  desc 'Provision env before assets:precompile'
+  task :fix_bug_env do
+    set :rails_env, (fetch(:rails_env) || fetch(:stage))
+  end
+
   desc 'Restart application'
   task :restart do
     on roles(:app, :web), in: :sequence, wait: 5 do
@@ -59,4 +64,5 @@ namespace :deploy do
   end
 
 end
-after 'deploy:publishing', 'thin:restart'
+# after 'deploy:publishing', 'thin:restart'
+before "deploy:assets:precompile", "deploy:fix_bug_env"
