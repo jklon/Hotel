@@ -2,7 +2,7 @@ class CreateStandards < ActiveRecord::Migration
   def change
     create_table :standards do |t|
       t.string :name
-      t.integer :number
+      t.integer :standard_number
       t.string :board
 
       t.timestamps null: false

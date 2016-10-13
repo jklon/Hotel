@@ -1,0 +1,12 @@
+= form_for @standard do |f|
+  .field
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .field
+    = f.label :standard_number
+    = f.text_field :standard_number, class: 'form-control'
+  .field
+    = f.label :board
+    = f.text_field :board, class: 'form-control'
+  
+  = f.submit 'Save'

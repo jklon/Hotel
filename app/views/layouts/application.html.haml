@@ -1,0 +1,24 @@
+!!!
+%html
+  %head
+    %title Hotel
+    = stylesheet_link_tag    'application', 'scaffold', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = stylesheet_link_tag    params[:controller]
+    = javascript_include_tag params[:controller]
+    = csrf_meta_tags  
+
+  %body
+    %nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          %a.navbar-brand{:href => "/"} Education
+          %button{:type => "button", :class => "navbar-toggle", "data-toggle" => "collapse", "data-target" => "#dm-navbar"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+    .row
+      .col-xs-2
+      .col-xs-10
+        = yield
+

@@ -24,11 +24,11 @@ ActiveRecord::Schema.define(version: 20161012214601) do
   end
 
   create_table "standards", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.integer  "number",     limit: 4
-    t.string   "board",      limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",            limit: 255
+    t.integer  "standard_number", limit: 4
+    t.string   "board",           limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "sub_topics", force: :cascade do |t|
