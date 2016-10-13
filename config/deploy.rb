@@ -66,3 +66,4 @@ namespace :deploy do
 end
 # after 'deploy:publishing', 'thin:restart'
 before "deploy:assets:precompile", "deploy:fix_bug_env"
+after "deploy:publishing", "deploy:restart"
