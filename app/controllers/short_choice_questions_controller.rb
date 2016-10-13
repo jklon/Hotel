@@ -1,0 +1,5 @@
+class ShortChoiceQuestionsController < ApplicationController
+
+  
+
+end

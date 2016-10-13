@@ -1,0 +1,21 @@
+-if @chapter
+  %h3= "#{@chapter.name}"
+-else
+  %h3 Topics
+
+%table.table
+  %tr
+    %th Name
+    %th Code
+    %th Chapter
+    %th Subject
+    %th Stream
+    %th Standard
+  - @topics.each do |t|
+    %tr
+      %td= link_to t.name, topics_path(:chapter_id => t.id)
+      %td= t.code
+      %td= t.chapter.name
+      %td= t.subject.full_name
+      %td= t.stream.name
+      %td= t.standard.name

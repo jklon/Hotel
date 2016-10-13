@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
 
+  
+  resources :topics
+  resources :short_choice_questions
   resources :chapters
   resources :subjects
   resources :standards

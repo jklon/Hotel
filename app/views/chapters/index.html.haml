@@ -5,9 +5,9 @@
     %th Code
     %th Subject
     %th Standard
-  - @chapters.each do |s|
+  - @chapters.each do |c|
     %tr
-      %td= s.name
-      %td= s.code
-      %td= s.subject.full_name
-      %td= s.standard.name
+      %td= link_to c.name, topics_path(:chapter_id => c.id)
+      %td= c.code
+      %td= c.subject.full_name
+      %td= c.standard.name

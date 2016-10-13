@@ -1,0 +1,2 @@
+module ShortChoiceQuestionsHelper
+end
