@@ -1,6 +1,6 @@
 require 'rubyXL'
 
-book = RubyXL::Parser.parse('/Users/neeraj/Documents/questions.xlsx')
+book = RubyXL::Parser.parse('/home/ec2-user/questions.xlsx')
 scq_sheet = book[0]
 
 standard    = Standard.find_by(:standard_number => 6)

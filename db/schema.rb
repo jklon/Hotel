@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013182250) do
+ActiveRecord::Schema.define(version: 20161021164218) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -34,22 +34,47 @@ ActiveRecord::Schema.define(version: 20161013182250) do
     t.integer  "short_choice_question_id", limit: 4
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.string   "label",                    limit: 255
+    t.string   "image",                    limit: 255
   end
 
   add_index "short_choice_answers", ["short_choice_question_id"], name: "index_short_choice_answers_on_short_choice_question_id", using: :btree
 
   create_table "short_choice_questions", force: :cascade do |t|
-    t.text     "question_text",      limit: 65535
-    t.text     "hint_text",          limit: 65535
-    t.text     "answer_description", limit: 65535
-    t.integer  "sub_topic_id",       limit: 4
-    t.integer  "topic_id",           limit: 4
-    t.integer  "chapter_id",         limit: 4
-    t.integer  "stream_id",          limit: 4
-    t.integer  "subject_id",         limit: 4
-    t.integer  "standard_id",        limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.text     "question_text",       limit: 65535
+    t.text     "hint_text",           limit: 65535
+    t.text     "answer_description",  limit: 65535
+    t.integer  "sub_topic_id",        limit: 4
+    t.integer  "topic_id",            limit: 4
+    t.integer  "chapter_id",          limit: 4
+    t.integer  "stream_id",           limit: 4
+    t.integer  "subject_id",          limit: 4
+    t.integer  "standard_id",         limit: 4
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "passage_image",       limit: 255
+    t.string   "question_image",      limit: 255
+    t.boolean  "hint_available"
+    t.text     "passage_footer",      limit: 65535
+    t.integer  "linked_question_tid", limit: 4
+    t.integer  "sequence_no",         limit: 4
+    t.string   "assertion",           limit: 255
+    t.text     "hint",                limit: 65535
+    t.text     "passage",             limit: 65535
+    t.integer  "solution_rating",     limit: 4
+    t.integer  "correct_answer_id",   limit: 4
+    t.string   "passage_header",      limit: 255
+    t.string   "answer_image",        limit: 255
+    t.text     "reason",              limit: 65535
+    t.string   "hint_image",          limit: 255
+    t.boolean  "multiple_correct"
+    t.string   "question_style",      limit: 255
+    t.integer  "level",               limit: 4
+    t.boolean  "answer_available"
+    t.text     "answer",              limit: 65535
+    t.boolean  "question_linked"
+    t.integer  "question_tid",        limit: 4
+    t.string   "difficulty",          limit: 255
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
@@ -117,6 +142,8 @@ ActiveRecord::Schema.define(version: 20161013182250) do
     t.datetime "updated_at",               null: false
     t.string   "code",         limit: 255
     t.integer  "stream_id",    limit: 4
+    t.integer  "goal_tid",     limit: 4
+    t.string   "description",  limit: 255
   end
 
   add_index "topics", ["code"], name: "index_topics_on_code", unique: true, using: :btree
