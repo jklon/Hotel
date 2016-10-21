@@ -9,7 +9,6 @@
     %th Code
     %th Chapter
     %th Subject
-    %th Stream
     %th Standard
   - @topics.each do |t|
     %tr
@@ -17,5 +16,4 @@
       %td= t.code
       %td= t.chapter.name
       %td= t.subject.full_name
-      %td= t.stream.name
       %td= t.standard.name
