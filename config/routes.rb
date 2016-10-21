@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
 
   
+  get 'short_choice_questions/index'
+
   resources :topics
   resources :short_choice_questions
   resources :chapters

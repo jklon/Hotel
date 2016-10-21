@@ -1,0 +1,10 @@
+- questions.each do |q|
+  %p 
+    %b= 'Question'
+    = q.question_text.html_safe
+  - if q.short_choice_answers.count > 0
+    - q.short_choice_answers.each do |ans|
+      %p
+        %span.options_label= ans.label
+        %span.options_text= ans.answer_text
+= will_paginate questions

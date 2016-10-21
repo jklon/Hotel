@@ -2,3 +2,9 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+.options_label{
+  font-weight: 700;
+}
+.options_text{
+  margin-left: 25px;
+}

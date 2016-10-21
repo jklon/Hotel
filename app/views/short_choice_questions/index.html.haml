@@ -1,0 +1,17 @@
+= form_for_filterrific @filterrific do |f|
+  .field
+    = f.label :chapter
+    = f.select :with_chapter_id, @filterrific.select_options[:with_chapter_id], { include_blank: '- Any -' }
+    = f.label :topic
+    = f.select :with_topic_id, @filterrific.select_options[:with_topic_id], { include_blank: '- Any -' }
+  .field
+    = f.label :difficulty
+    = f.select :with_difficulty, @filterrific.select_options[:with_difficulty], { include_blank: '- Any -' }
+    = f.label :level
+    = f.select :with_level, @filterrific.select_options[:with_level], { include_blank: '- Any -' }
+    = render_filterrific_spinner
+    = f.submit 'Go'
+    = link_to 'Reset Filters', reset_filterrific_url
+%br
+
+= render partial: 'list', locals: {questions: @questions}
