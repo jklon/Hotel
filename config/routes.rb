@@ -2,7 +2,9 @@ Rails.application.routes.draw do
 
 
   
+  devise_for :users
   get 'short_choice_questions/index'
+  root to: "home#index"
 
   resources :topics
   resources :short_choice_questions

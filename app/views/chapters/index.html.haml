@@ -7,7 +7,7 @@
     %th Standard
   - @chapters.each do |c|
     %tr
-      %td= link_to c.name, topics_path(:chapter_id => c.id)
+      %td= link_to c.name, short_choice_questions_path(:chapter_id => c.id)
       %td= c.code
       %td= c.subject.full_name
       %td= c.standard.name

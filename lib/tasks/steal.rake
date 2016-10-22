@@ -1,24 +1,27 @@
 namespace :steal do 
   task :steal => :environment do
-    chapters = ['rational-number', 'linear-equations-in-one-variable', 'understanding-polygons', 'data-handling',
-   'squares-and-square-roots', 'cubes-and-cube-roots', 'comparing-quantities', 'algebraic-expressions-and-identities',
+    done = ['rational-number', 'linear-equations-in-one-variable', 'understanding-polygons','data-handling', 'squares-and-square-roots']
+    chapters = ['comparing-quantities', 'algebraic-expressions-and-identities',
     'visualizing-solid-shapes', 'mensuration', 'exponents-and-powers', 'direct-and-inverse-proportions', 'factorisation',
     'introduction-to-graphs', 'playing-with-numbers']
 
 
-    chapters = ['rational-number']
-    # chapters = ['linear-equations-in-one-variable']
+    # chapters = ['rational-number']
+    # chapters = ['understanding-polygons', 'linear-equations-in-one-variable']
+    chapters = ['cubes-and-cube-roots'] # To be done
     cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
 
 
     chapters.each do |chap_name|
-      create_topics chap_name
       if not chapter = Chapter.find_by(:name => chap_name)
         chapter = Chapter.create(:name => chap_name, :subject_id => 1, :standard_id => 1)
       end
 
+      create_topics chap_name
+
       chapter.topics.each do |topic|
-        ['medium', 'easy'].each do |difficulty|
+        next if topic.goal_tid <= 8085
+        ['medium', 'easy', 'hard'].each do |difficulty|
           number_of_pages = get_number_of_pages(chap_name, difficulty, topic)
           puts number_of_pages.to_s + "=================================="
           (1..number_of_pages).each do |page|
