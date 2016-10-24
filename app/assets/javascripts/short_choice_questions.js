@@ -27,7 +27,7 @@ function get_chapter_topics (chapter_id) {
     success: function(data){
       test(data)
       fill_topic_options(data)
-    }  
+    }
   });
 }
 
