@@ -2,15 +2,16 @@ class ShortChoiceQuestionsController < ApplicationController
 
   def index
     # @questions = ShortChoiceQuestion.get_questions(@topic, @chapter)
+    params[:filterrific] ||= {}
     @filterrific = initialize_filterrific(
       ShortChoiceQuestion,
       params[:filterrific],
       select_options: {
-        with_topic_id: ShortChoiceQuestion.options_for_topics,
+        with_topic_id: ShortChoiceQuestion.options_for_topics(params[:filterrific][:with_chapter_id]),
         with_chapter_id: ShortChoiceQuestion.options_for_chapters,
         with_difficulty: ShortChoiceQuestion.options_for_difficulty,
         with_level: ShortChoiceQuestion.options_for_levels,
-        with_subject_id: ShortChoiceQuestion.options_for_subjects
+        with_standard_id: ShortChoiceQuestion.options_for_standards
       },
     ) or return
 

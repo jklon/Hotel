@@ -1,7 +1,10 @@
 = form_for_filterrific @filterrific do |f|
   .field
+    = f.label :standard
+    = f.select :with_standard_id, @filterrific.select_options[:with_standard_id], {include_blank: '- Any -'}
     = f.label :chapter
     = f.select :with_chapter_id, @filterrific.select_options[:with_chapter_id], { include_blank: '- Any -' }
+  .field
     = f.label :topic
     = f.select :with_topic_id, @filterrific.select_options[:with_topic_id], { include_blank: '- Any -' }
   .field

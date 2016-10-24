@@ -28,7 +28,7 @@ end
 
 def get_number_of_pages(chap_name)
   url = "https://www.toppr.com/api/v4/class-8/maths/#{chap_name}/question-bank/?format=json&page=1&difficulty=easy&goal=0"
-  data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
+  data = JSON.parse(`curl -v --cookie "#{cook ie}" #{url}`)
   data["n_questions"]/10
 end
 

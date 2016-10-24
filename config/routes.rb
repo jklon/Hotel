@@ -8,9 +8,13 @@ Rails.application.routes.draw do
 
   resources :topics
   resources :short_choice_questions
-  resources :chapters
+  resources :chapters do 
+    get :get_topics_list
+  end
   resources :subjects
-  resources :standards
+  resources :standards do 
+    get :get_chapters_list
+  end
 
   get "/" => "home#index"
 

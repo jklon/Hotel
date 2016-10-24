@@ -12,3 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+
+function test(element=undefined){
+  console.log("hi" || element);
+}

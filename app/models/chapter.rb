@@ -5,5 +5,6 @@ class Chapter < ActiveRecord::Base
   has_many :topics
   has_many :sub_topics
   validates :name, uniqueness: true, presence: true
+  has_many :short_choice_questions
 end
 

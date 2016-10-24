@@ -17,4 +17,7 @@ class TopicsController < ApplicationController
     end
   end
 
+  def set_topic
+  end
+
 end

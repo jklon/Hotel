@@ -2,6 +2,10 @@
   %p 
     %b= 'Question'
     = q.question_text.html_safe
+  
+  - if q.question_image
+    %p= image_tag q.question_image
+
   - if q.short_choice_answers.count > 0
     - q.short_choice_answers.each do |ans|
       %p
