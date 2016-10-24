@@ -13,6 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 
-function test(element=undefined){
+function test(element){
   console.log("hi" || element);
 }
