@@ -8,3 +8,34 @@
 .options_text{
   margin-left: 25px;
 }
+
+.scq_answers{
+  margin-left: 15px;
+}
+
+.scq_entry{
+  position: relative;
+}
+.scq_entry img{
+  max-width: 100%
+}
+.scq_question {
+  padding-right: 30px;
+}
+.scq_question_row{
+  margin: 20px 0;
+}
+
+.edit_scq_btn{
+  position: absolute;
+  top:0;
+  right: 0
+}
+
+.edit_scq_form select{
+  float: right;
+  max-width:180px;
+}
+.edit_scq_form input{
+  float: right
+}

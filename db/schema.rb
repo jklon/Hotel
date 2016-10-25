@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161022112351) do
+ActiveRecord::Schema.define(version: 20161025063112) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -41,43 +41,47 @@ ActiveRecord::Schema.define(version: 20161022112351) do
   add_index "short_choice_answers", ["short_choice_question_id"], name: "index_short_choice_answers_on_short_choice_question_id", using: :btree
 
   create_table "short_choice_questions", force: :cascade do |t|
-    t.text     "question_text",       limit: 65535
-    t.text     "hint_text",           limit: 65535
-    t.text     "answer_description",  limit: 65535
-    t.integer  "sub_topic_id",        limit: 4
-    t.integer  "topic_id",            limit: 4
-    t.integer  "chapter_id",          limit: 4
-    t.integer  "stream_id",           limit: 4
-    t.integer  "subject_id",          limit: 4
-    t.integer  "standard_id",         limit: 4
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.string   "passage_image",       limit: 255
-    t.string   "question_image",      limit: 255
+    t.text     "question_text",              limit: 65535
+    t.text     "hint_text",                  limit: 65535
+    t.text     "answer_description",         limit: 65535
+    t.integer  "sub_topic_id",               limit: 4
+    t.integer  "topic_id",                   limit: 4
+    t.integer  "chapter_id",                 limit: 4
+    t.integer  "stream_id",                  limit: 4
+    t.integer  "subject_id",                 limit: 4
+    t.integer  "standard_id",                limit: 4
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.string   "passage_image",              limit: 255
+    t.string   "question_image",             limit: 255
     t.boolean  "hint_available"
-    t.text     "passage_footer",      limit: 65535
-    t.integer  "linked_question_tid", limit: 4
-    t.integer  "sequence_no",         limit: 4
-    t.string   "assertion",           limit: 255
-    t.text     "hint",                limit: 65535
-    t.text     "passage",             limit: 65535
-    t.integer  "solution_rating",     limit: 4
-    t.integer  "correct_answer_id",   limit: 4
-    t.string   "passage_header",      limit: 255
-    t.string   "answer_image",        limit: 255
-    t.text     "reason",              limit: 65535
-    t.string   "hint_image",          limit: 255
+    t.text     "passage_footer",             limit: 65535
+    t.integer  "linked_question_tid",        limit: 4
+    t.integer  "sequence_no",                limit: 4
+    t.string   "assertion",                  limit: 255
+    t.text     "hint",                       limit: 65535
+    t.text     "passage",                    limit: 65535
+    t.integer  "solution_rating",            limit: 4
+    t.integer  "correct_answer_id",          limit: 4
+    t.string   "passage_header",             limit: 255
+    t.string   "answer_image",               limit: 255
+    t.text     "reason",                     limit: 65535
+    t.string   "hint_image",                 limit: 255
     t.boolean  "multiple_correct"
-    t.string   "question_style",      limit: 255
-    t.integer  "level",               limit: 4
+    t.string   "question_style",             limit: 255
+    t.integer  "level",                      limit: 4
     t.boolean  "answer_available"
-    t.text     "answer",              limit: 65535
+    t.text     "answer",                     limit: 65535
     t.boolean  "question_linked"
-    t.integer  "question_tid",        limit: 4
-    t.string   "difficulty",          limit: 255
+    t.integer  "question_tid",               limit: 4
+    t.string   "difficulty",                 limit: 255
+    t.integer  "reference_solving_time",     limit: 4
+    t.boolean  "include_in_diagnostic_test"
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
+  add_index "short_choice_questions", ["difficulty"], name: "index_short_choice_questions_on_difficulty", using: :btree
+  add_index "short_choice_questions", ["level"], name: "index_short_choice_questions_on_level", using: :btree
   add_index "short_choice_questions", ["standard_id"], name: "index_short_choice_questions_on_standard_id", using: :btree
   add_index "short_choice_questions", ["stream_id"], name: "index_short_choice_questions_on_stream_id", using: :btree
   add_index "short_choice_questions", ["sub_topic_id"], name: "index_short_choice_questions_on_sub_topic_id", using: :btree

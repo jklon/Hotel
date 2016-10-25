@@ -1,14 +1,42 @@
 - questions.each do |q|
-  %p 
-    %b= 'Question'
-    = q.question_text.html_safe
-  
-  - if q.question_image
-    %p= image_tag q.question_image
+  .row.scq_question_row
+    %p.bold= 'Question'
+    .col-xs-8
+      .scq_entry
+        .scq_question
+          %p 
+            = q.question_text.html_safe
 
-  - if q.short_choice_answers.count > 0
-    - q.short_choice_answers.each do |ans|
-      %p
-        %span.options_label= ans.label
-        %span.options_text= ans.answer_text
+          - if q.question_image
+            %p= image_tag q.question_image
+
+        / %span.glyphicon.glyphicon-pencil.grey.edit_scq_btn
+
+        .scq_answers  
+          - if q.short_choice_answers.count > 0
+            - q.short_choice_answers.each do |ans|
+              %p
+                %span.options_label= ans.label
+                %span.options_text= ans.answer_text
+    .col-xs-4
+      .edit_scq_form
+        = form_for q, :remote => true do |f|
+          .block_field_without_margin
+            = f.label :reference_time
+            = f.text_field :reference_solving_time, class: 'small_text_field'
+          .block_field_without_margin
+            = f.label :for_d_test
+            = f.select :include_in_diagnostic_test, [['false' , false], ['true' , true]]
+          .block_field_without_margin
+            = f.label :level
+            = f.select :level, ShortChoiceQuestion.options_for_levels
+          .block_field_without_margin
+            = f.label :topic
+            = f.select :topic_id, ShortChoiceQuestion.options_for_topics(q.chapter_id)
+          = f.submit "Update"
+          .green{ :id => "scq_#{q.id}_update_sucess"}
+          .red{ :id => "scq_#{q.id}_update_fail"}
+
+
+
 = will_paginate questions

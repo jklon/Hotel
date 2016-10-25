@@ -13,3 +13,25 @@
  *= require_self
  *= require bootstrap.min
  */
+
+.glyphicon{
+  font-size: 25px;
+}
+
+.block_field_without_margin{
+  display: block;
+  margin: 2px 0;
+}
+
+.small_text_field{
+  width: 40px;
+}
+.red{
+  color: red
+}
+.green{
+  color: green
+}
+.bold{
+  font-weight: bold
+}

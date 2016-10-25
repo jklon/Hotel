@@ -9,8 +9,6 @@ $(document).ready(function(){
 
 function fill_topic_options (options){
   var element = $("#filterrific_with_topic_id").html("<option value>- Any -</option>");
-  test(element);
-  test();
   for (var i=0; i<options.length; i++){
     $('<option/>' ,{
       'value' : options[i][1],

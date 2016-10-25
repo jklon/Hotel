@@ -7,6 +7,10 @@ class ShortChoiceQuestion < ActiveRecord::Base
   belongs_to :stream
   belongs_to :sub_topic
 
+  # validates :reference_solving_time, numericality: true, :if => Proc.new { 
+  #   |o| o.reference_solving_time != ""
+  # }
+
   filterrific(
     default_filter_params: { with_difficulty: 'easy' },
     available_filters: [
@@ -48,7 +52,7 @@ class ShortChoiceQuestion < ActiveRecord::Base
 
   def self.options_for_levels
     levels = []
-    (1..6).each{|i| levels << [i,i]}
+    (1..5).each{|i| levels << [i,i]}
     levels
   end
 

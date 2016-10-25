@@ -1,4 +1,5 @@
 class ShortChoiceQuestionsController < ApplicationController
+  before_filter :find_short_choice_question, only: [:update]
 
   def index
     # @questions = ShortChoiceQuestion.get_questions(@topic, @chapter)
@@ -20,4 +21,26 @@ class ShortChoiceQuestionsController < ApplicationController
     @questions = @questions.paginate(:page => params[:page], :per_page => 10)
   end
 
+  def update
+    if @scq.update(short_choice_question_params)
+      respond_to do |format|
+        format.js
+      end
+    else
+      respond_to do |format|
+        format.js {render "xhr_update_fail", status: :bad_request}
+      end
+    end
+  end
+
+  private
+
+  def short_choice_question_params
+    params.require(:short_choice_question).permit(:reference_solving_time, :level, :difficulty, :include_in_diagnostic_test, :topic_id)
+  end
+
+  def find_short_choice_question
+    @scq = ShortChoiceQuestion.find_by_id(params[:short_choice_question_id] || params[:id])
+    render nothing: true, status: :not_found unless @scq.present?
+  end
 end
