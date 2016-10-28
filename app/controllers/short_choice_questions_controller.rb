@@ -9,7 +9,7 @@ class ShortChoiceQuestionsController < ApplicationController
       params[:filterrific],
       select_options: {
         with_topic_id: ShortChoiceQuestion.options_for_topics(params[:filterrific][:with_chapter_id]),
-        with_chapter_id: ShortChoiceQuestion.options_for_chapters,
+        with_chapter_id: ShortChoiceQuestion.options_for_chapters(params[:filterrific][:with_standard_id]),
         with_difficulty: ShortChoiceQuestion.options_for_difficulty,
         with_level: ShortChoiceQuestion.options_for_levels,
         with_standard_id: ShortChoiceQuestion.options_for_standards
