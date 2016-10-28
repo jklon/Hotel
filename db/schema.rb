@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025063112) do
+ActiveRecord::Schema.define(version: 20161028134533) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -27,6 +27,39 @@ ActiveRecord::Schema.define(version: 20161025063112) do
 
   add_index "chapters", ["code"], name: "index_chapters_on_code", unique: true, using: :btree
   add_index "chapters", ["stream_id"], name: "index_chapters_on_stream_id", using: :btree
+
+  create_table "extra_marks_answers", force: :cascade do |t|
+    t.integer  "extra_marks_question_id", limit: 4
+    t.boolean  "correct"
+    t.text     "answer_text",             limit: 65535
+    t.string   "label",                   limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.integer  "em_answer_id",            limit: 4
+  end
+
+  add_index "extra_marks_answers", ["extra_marks_question_id"], name: "index_extra_marks_answers_on_extra_marks_question_id", using: :btree
+
+  create_table "extra_marks_questions", force: :cascade do |t|
+    t.integer  "em_question_id",     limit: 4
+    t.text     "question_text",      limit: 65535
+    t.string   "question_type",      limit: 255
+    t.text     "answer_description", limit: 65535
+    t.string   "difficulty",         limit: 255
+    t.integer  "level",              limit: 4
+    t.string   "answer_type",        limit: 255
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "standard_id",        limit: 4
+    t.integer  "chapter_id",         limit: 4
+    t.integer  "subject_id",         limit: 4
+  end
+
+  add_index "extra_marks_questions", ["chapter_id"], name: "index_extra_marks_questions_on_chapter_id", using: :btree
+  add_index "extra_marks_questions", ["em_question_id"], name: "index_extra_marks_questions_on_em_question_id", using: :btree
+  add_index "extra_marks_questions", ["level"], name: "index_extra_marks_questions_on_level", using: :btree
+  add_index "extra_marks_questions", ["standard_id"], name: "index_extra_marks_questions_on_standard_id", using: :btree
+  add_index "extra_marks_questions", ["subject_id"], name: "index_extra_marks_questions_on_subject_id", using: :btree
 
   create_table "short_choice_answers", force: :cascade do |t|
     t.text     "answer_text",              limit: 65535
