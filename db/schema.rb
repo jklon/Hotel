@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028134533) do
+ActiveRecord::Schema.define(version: 20161028142052) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20161028134533) do
     t.integer  "standard_id",        limit: 4
     t.integer  "chapter_id",         limit: 4
     t.integer  "subject_id",         limit: 4
+    t.integer  "topic_id",           limit: 4
   end
 
   add_index "extra_marks_questions", ["chapter_id"], name: "index_extra_marks_questions_on_chapter_id", using: :btree

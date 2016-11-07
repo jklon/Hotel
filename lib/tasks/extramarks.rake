@@ -1,7 +1,7 @@
 namespace :extramarks do
   task :lol => :environment do
-    chapters = ['1458', '1457', '1459', '1460', '1462', '1461', '1453', '1454', '1456', '1465', '1464', '1463', '1455', '1466']
-
+    chapters_6 = ['1458', '1457', '1459', '1460', '1462', '1461', '1453', '1454', '1456', '1465', '1464', '1463', '1455', '1466']
+    chapters_7 = ['1401', '']
     # chapters = ['1458']
 
     chapters.each do |chap_id|
@@ -76,11 +76,11 @@ def get_extramarks_url page_number, chap_id
 end
 
 def extramarks_subject_id
-  3
+  5
 end
 
 def extramarks_standard_id
-  3
+  5
 end
 
 def get_cookie

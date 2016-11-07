@@ -2,26 +2,32 @@ namespace :steal do
   task :steal => :environment do
     done_8 = ['direct-and-inverse-proportions', 'factorisation','introduction-to-graphs','exponents-and-powers','rational-number', 'linear-equations-in-one-variable', 'understanding-polygons','data-handling', 'squares-and-square-roots', 'cubes-and-cube-roots', 'playing-with-numbers', 'comparing-quantities','algebraic-expressions-and-identities', 'visualizing-solid-shapes']
     done_9 = ['number-systems', 'polynomials','coordinate-geometry','linear-equations-in-two-variables','introduction-to-euclids-geometry', 'lines-and-angles', 'triangles','quadrilaterals',
-    'areas-of-parallelograms-and-triangles', 'circles', 'probability','statistics', 'herons-formula']
-    chapters = [ 'surface-areas-and-volumes', 'herons-formula']
+    'areas-of-parallelograms-and-triangles', 'circles', 'probability','statistics', 'herons-formula', 'surface-areas-and-volumes']
+
+    chapters = ['pair-of-linear-equations-in-two-variables', 'polynomials', 'real-numbers', 'quadratic-equations', 'arithmetic-progression',
+      'triangles', 'coordinate-geometry', 'introduction-to-trigonometry', 'some-applications-of-trigonometry','circles',
+      'area-related-to-circles', 'surface-areas-and-volumes', 'statistics', 'probability']
+
+    # 0
 
 
-    # chapters = ['rational-number']
-    # chapters = ['understanding-polygons', 'linear-equations-in-one-variable']
-    # chapters = [ 'herons-formula'] # To be done
+    chapters = ['polynomials']
+
     cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
 
 
-    chapters.each do |chap_name|
-      if not chapter = Chapter.find_by(:name => chap_name)
+    chapters.each do |chap_name|  
+      if not chapter = Chapter.where(:name => chap_name, :standard_id => standard_id, :subject_id => subject_id).first
         chapter = Chapter.create(:name => chap_name, :subject_id => subject_id, :standard_id => standard_id)
       end
+
+      puts chapter.id
 
       create_topics chapter
 
       chapter.topics.each do |topic|
-        next if topic.goal_tid <= 8363
-        ['medium'].each do |difficulty|
+        # next if topic.goal_tid < 8336
+        ['medium', 'easy','hard'].each do |difficulty|
           number_of_pages = get_number_of_pages(chap_name, difficulty, topic)
           puts number_of_pages.to_s + "=================================="
           (1..number_of_pages).each do |page|
@@ -41,9 +47,9 @@ end
 
 def create_topics(chapter)
   cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
-  url = "https://www.toppr.com/api/v4/class-9/maths/#{chapter.name}/question-bank/?format=json"
+  url = "https://www.toppr.com/api/v4/class-10/maths/#{chapter.name}/question-bank/?format=json"
   data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
-  # puts data
+  puts data["goals"]
   data["goals"].each do |goal|
     Topic.create(
       :name => goal['goal'],
@@ -59,7 +65,7 @@ end
 
 def get_number_of_pages(chap_name, difficulty, topic)
   cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
-  url = "https://www.toppr.com/api/v4/class-9/maths/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  url = "https://www.toppr.com/api/v4/class-10/maths/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
   data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
 
   puts "=============== #{data['n_questions']}"
@@ -68,7 +74,7 @@ end
 
 
 def get_url chap_name, page, difficulty, topic
-  "https://www.toppr.com/api/v4/class-9/maths/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  "https://www.toppr.com/api/v4/class-10/maths/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
 end
 
 def save_data(data, chapter, difficulty, topic)
@@ -120,8 +126,8 @@ def save_data(data, chapter, difficulty, topic)
 end
 
 def subject_id
-  2
+  4
 end
 def standard_id
-  2
+  4
 end
