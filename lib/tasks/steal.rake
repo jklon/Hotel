@@ -4,16 +4,15 @@ namespace :steal do
     done_9 = ['number-systems', 'polynomials','coordinate-geometry','linear-equations-in-two-variables','introduction-to-euclids-geometry', 'lines-and-angles', 'triangles','quadrilaterals',
     'areas-of-parallelograms-and-triangles', 'circles', 'probability','statistics', 'herons-formula', 'surface-areas-and-volumes']
 
-    chapters = ['pair-of-linear-equations-in-two-variables', 'polynomials', 'real-numbers', 'quadratic-equations', 'arithmetic-progression',
-      'triangles', 'coordinate-geometry', 'introduction-to-trigonometry', 'some-applications-of-trigonometry','circles',
-      'area-related-to-circles', 'surface-areas-and-volumes', 'statistics', 'probability']
+    done_10 = ['triangles', 'probability', 'statistics', 'pair-of-linear-equations-in-two-variables', 'polynomials', 'real-numbers', 'quadratic-equations', 'arithmetic-progression',
+      'coordinate-geometry','introduction-to-trigonometry', 'some-applications-of-trigonometry', 'circles']
 
-    # 0
+    chapters = [ 'surface-areas-and-volumes']
 
 
-    chapters = ['polynomials']
+    # chapters = []
 
-    cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
+    cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
 
 
     chapters.each do |chap_name|  
@@ -31,13 +30,17 @@ namespace :steal do
           number_of_pages = get_number_of_pages(chap_name, difficulty, topic)
           puts number_of_pages.to_s + "=================================="
           (1..number_of_pages).each do |page|
-            url = get_url(chap_name, page, difficulty, topic)
-            puts "========================================== #{url} =============================================="
-            data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
-            save_data(data, chapter, difficulty, topic)
-            x = Random.rand(100)
-            puts x
-            sleep(x)
+            begin
+              url = get_url(chap_name, page, difficulty, topic)
+              puts "========================================== #{url} =============================================="
+              data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
+              save_data(data, chapter, difficulty, topic)
+              x = Random.rand(40)
+              puts x
+              sleep(x)
+            rescue Exception => e  
+              puts e.message + "error error error error error error error error error error error error"
+            end
           end
         end
       end
@@ -46,7 +49,7 @@ namespace :steal do
 end
 
 def create_topics(chapter)
-  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
+  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
   url = "https://www.toppr.com/api/v4/class-10/maths/#{chapter.name}/question-bank/?format=json"
   data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
   puts data["goals"]
@@ -64,10 +67,14 @@ def create_topics(chapter)
 end
 
 def get_number_of_pages(chap_name, difficulty, topic)
-  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221393635%22; ajs_group_id=null; ajs_anonymous_id=%22751ec092-5b52-4c75-aa22-46c4e1ebf419%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20161019%3A7%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A7%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A7; admin_sessionid=eb1e428e6198fd4b568732b78ef9b702"
+  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
   url = "https://www.toppr.com/api/v4/class-10/maths/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
-  data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
-
+  begin
+    data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
+  rescue Exception => e  
+    puts "Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error Error "
+    return get_number_of_pages(chap_name, difficulty, topic)
+  end
   puts "=============== #{data['n_questions']}"
   return data["n_questions"]/10 + 1
 end

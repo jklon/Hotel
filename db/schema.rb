@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028142052) do
+ActiveRecord::Schema.define(version: 20161113141624) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -27,6 +27,13 @@ ActiveRecord::Schema.define(version: 20161028142052) do
 
   add_index "chapters", ["code"], name: "index_chapters_on_code", unique: true, using: :btree
   add_index "chapters", ["stream_id"], name: "index_chapters_on_stream_id", using: :btree
+
+  create_table "difficulty_levels", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "value",      limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "extra_marks_answers", force: :cascade do |t|
     t.integer  "extra_marks_question_id", limit: 4
@@ -61,6 +68,28 @@ ActiveRecord::Schema.define(version: 20161028142052) do
   add_index "extra_marks_questions", ["level"], name: "index_extra_marks_questions_on_level", using: :btree
   add_index "extra_marks_questions", ["standard_id"], name: "index_extra_marks_questions_on_standard_id", using: :btree
   add_index "extra_marks_questions", ["subject_id"], name: "index_extra_marks_questions_on_subject_id", using: :btree
+
+  create_table "proficiency_levels", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "value",      limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "second_topics", force: :cascade do |t|
+    t.integer  "chapter_id",  limit: 4
+    t.integer  "subject_id",  limit: 4
+    t.integer  "standard_id", limit: 4
+    t.string   "name",        limit: 255
+    t.integer  "stream_id",   limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "second_topics", ["chapter_id"], name: "index_second_topics_on_chapter_id", using: :btree
+  add_index "second_topics", ["standard_id"], name: "index_second_topics_on_standard_id", using: :btree
+  add_index "second_topics", ["stream_id"], name: "index_second_topics_on_stream_id", using: :btree
+  add_index "second_topics", ["subject_id"], name: "index_second_topics_on_subject_id", using: :btree
 
   create_table "short_choice_answers", force: :cascade do |t|
     t.text     "answer_text",              limit: 65535
@@ -111,11 +140,13 @@ ActiveRecord::Schema.define(version: 20161028142052) do
     t.string   "difficulty",                 limit: 255
     t.integer  "reference_solving_time",     limit: 4
     t.boolean  "include_in_diagnostic_test"
+    t.integer  "second_topic_id",            limit: 4
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
   add_index "short_choice_questions", ["difficulty"], name: "index_short_choice_questions_on_difficulty", using: :btree
   add_index "short_choice_questions", ["level"], name: "index_short_choice_questions_on_level", using: :btree
+  add_index "short_choice_questions", ["second_topic_id"], name: "index_short_choice_questions_on_second_topic_id", using: :btree
   add_index "short_choice_questions", ["standard_id"], name: "index_short_choice_questions_on_standard_id", using: :btree
   add_index "short_choice_questions", ["stream_id"], name: "index_short_choice_questions_on_stream_id", using: :btree
   add_index "short_choice_questions", ["sub_topic_id"], name: "index_short_choice_questions_on_sub_topic_id", using: :btree
