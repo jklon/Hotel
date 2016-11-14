@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  topic_id: 1
+  second_topic_id: 1
+  active: false
+  difficulty: 1
+  chapter_id: 1
+  stream_id: 1
+  standard_id: 1
+  subject_id: 1
+
+two:
+  topic_id: 1
+  second_topic_id: 1
+  active: false
+  difficulty: 1
+  chapter_id: 1
+  stream_id: 1
+  standard_id: 1
+  subject_id: 1
