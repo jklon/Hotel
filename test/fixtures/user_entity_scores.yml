@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  entity_name: MyString
+  entity_id: 1
+  high_score: 1
+  diamonds: 1
+  ranking: 1.5
+  attempted: false
+  proficiency: 1
+
+two:
+  user_id: 1
+  entity_name: MyString
+  entity_id: 1
+  high_score: 1
+  diamonds: 1
+  ranking: 1.5
+  attempted: false
+  proficiency: 1
