@@ -1,0 +1,1 @@
+json.array! @standards, :id, :name, :standard_number
