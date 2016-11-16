@@ -7,10 +7,7 @@ class ShortChoiceQuestion < ActiveRecord::Base
   belongs_to :second_topic
   belongs_to :stream
   belongs_to :sub_topic
-
-  # validates :reference_solving_time, numericality: true, :if => Proc.new { 
-  #   |o| o.reference_solving_time != ""
-  # }
+  has_many :diagnostic_test, :through => :diagnostic_test_questions, :as => :question
 
   filterrific(
     default_filter_params: { with_difficulty: 'easy' },

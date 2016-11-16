@@ -4,4 +4,5 @@ class ExtraMarksQuestion < ActiveRecord::Base
   belongs_to :topic
   belongs_to :standard
   belongs_to :topic
+  has_many :diagnostic_test, :through => :diagnostic_test_questions, :as => :question
 end
