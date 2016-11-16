@@ -24,6 +24,12 @@ Rails.application.routes.draw do
         get :get_standards
       end
     end
+
+    resources :diagnostic_tests do 
+      member do
+        get :get_test
+      end
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
