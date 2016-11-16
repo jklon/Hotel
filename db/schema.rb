@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114061640) do
+ActiveRecord::Schema.define(version: 20161116073814) do
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -27,6 +27,22 @@ ActiveRecord::Schema.define(version: 20161114061640) do
 
   add_index "chapters", ["code"], name: "index_chapters_on_code", unique: true, using: :btree
   add_index "chapters", ["stream_id"], name: "index_chapters_on_stream_id", using: :btree
+
+  create_table "diagnostic_test_questions", force: :cascade do |t|
+    t.string   "question_type",      limit: 255
+    t.integer  "question_id",        limit: 4
+    t.integer  "diagnostic_test_id", limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  create_table "diagnostic_tests", force: :cascade do |t|
+    t.integer  "standard_id", limit: 4
+    t.integer  "subject_id",  limit: 4
+    t.string   "name",        limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
   create_table "difficulty_levels", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -218,6 +234,23 @@ ActiveRecord::Schema.define(version: 20161114061640) do
   add_index "topics", ["code"], name: "index_topics_on_code", unique: true, using: :btree
   add_index "topics", ["stream_id"], name: "index_topics_on_stream_id", using: :btree
 
+  create_table "user_entity_scores", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4
+    t.string   "entity_name", limit: 255
+    t.integer  "entity_id",   limit: 4
+    t.integer  "high_score",  limit: 4
+    t.integer  "diamonds",    limit: 4
+    t.float    "ranking",     limit: 24
+    t.boolean  "attempted"
+    t.integer  "proficiency", limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "user_entity_scores", ["entity_id"], name: "index_user_entity_scores_on_entity_id", using: :btree
+  add_index "user_entity_scores", ["entity_name"], name: "index_user_entity_scores_on_entity_name", using: :btree
+  add_index "user_entity_scores", ["user_id"], name: "index_user_entity_scores_on_user_id", using: :btree
+
   create_table "user_worksheet_attempts", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
     t.integer  "topic_id",        limit: 4
@@ -229,8 +262,9 @@ ActiveRecord::Schema.define(version: 20161114061640) do
     t.boolean  "win"
     t.integer  "defeat_level",    limit: 4
     t.integer  "worksheet_id",    limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.float    "ranking",         limit: 24
   end
 
   add_index "user_worksheet_attempts", ["second_topic_id"], name: "index_user_worksheet_attempts_on_second_topic_id", using: :btree

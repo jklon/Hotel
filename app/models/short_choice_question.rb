@@ -7,7 +7,8 @@ class ShortChoiceQuestion < ActiveRecord::Base
   belongs_to :second_topic
   belongs_to :stream
   belongs_to :sub_topic
-  has_many :diagnostic_test, :through => :diagnostic_test_questions, :as => :question
+  has_many :diagnostic_test_questions, :as => :question
+  has_many :diagnostic_tests, :through => :diagnostic_test_questions
 
   filterrific(
     default_filter_params: { with_difficulty: 'easy' },
