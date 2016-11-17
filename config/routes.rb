@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
 
     resources :diagnostic_tests do 
-      member do
+      collection do
         get :get_test
       end
     end
