@@ -1,4 +1,5 @@
 class Api::DiagnosticTestsController < ApiController
+  skip_before_action :authenticate_user!
   
   def get_test
     @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers]).find(params[:id])
