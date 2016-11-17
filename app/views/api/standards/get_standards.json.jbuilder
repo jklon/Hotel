@@ -1,1 +1,3 @@
-json.array! @standards, :id, :name, :standard_number
+json.standards do
+  json.array! @standards, partial: 'show', as: :standard
+end

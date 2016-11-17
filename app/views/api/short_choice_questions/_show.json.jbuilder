@@ -1,4 +1,4 @@
-json.id                                     scq.id
+json.short_choice_question_id               scq.id
 json.question_text                          scq.question_text
 json.question_image                         scq.question_image
 json.hint_text                              scq.hint_text
