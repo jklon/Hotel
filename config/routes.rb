@@ -27,7 +27,14 @@ Rails.application.routes.draw do
 
     resources :diagnostic_tests do 
       collection do
-        get :get_test
+        get   :get_test
+        post  :test_attempt
+      end
+    end
+
+    resources :users do
+      collection do
+        post :register
       end
     end
   end

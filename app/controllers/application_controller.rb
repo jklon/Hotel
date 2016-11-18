@@ -6,6 +6,22 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
 
+  def user_params_sane? user_params
+    unless user_params[:number]
+      render json: {error: "no customer number"}, status: :unprocessable_entity
+      return
+    end
+
+    unless user_params[:number].length == 10
+      render json: {error: "customer number is wrong. Enter 10 digit mobile number (without leading 0 or +91)"}, status: :unprocessable_entity
+      return
+    end
+
+    unless user_params[:first_name]
+      render json: {error: "no customer name"}, status: :unprocessable_entity
+      return
+    end
+  end
 
   protected
 

@@ -6,6 +6,10 @@ class Api::DiagnosticTestsController < ApiController
     .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id]).first
   end
 
+  def test_attempt
+      
+  end
+
   private
 
   def diagnostic_test_params

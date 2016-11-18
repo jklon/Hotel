@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117115802) do
+ActiveRecord::Schema.define(version: 20161117205248) do
+
+  create_table "auth_tokens", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.string   "number",     limit: 255
+    t.string   "auth_token", limit: 255
+    t.integer  "otp",        limit: 4
+    t.string   "device_id",  limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "auth_tokens", ["auth_token"], name: "index_auth_tokens_on_auth_token", using: :btree
+  add_index "auth_tokens", ["user_id"], name: "index_auth_tokens_on_user_id", using: :btree
 
   create_table "chapters", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -250,6 +263,16 @@ ActiveRecord::Schema.define(version: 20161117115802) do
   add_index "user_entity_scores", ["entity_id"], name: "index_user_entity_scores_on_entity_id", using: :btree
   add_index "user_entity_scores", ["entity_name"], name: "index_user_entity_scores_on_entity_name", using: :btree
   add_index "user_entity_scores", ["user_id"], name: "index_user_entity_scores_on_user_id", using: :btree
+
+  create_table "user_phone_numbers", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.string   "number",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "user_phone_numbers", ["number"], name: "index_user_phone_numbers_on_number", using: :btree
+  add_index "user_phone_numbers", ["user_id"], name: "index_user_phone_numbers_on_user_id", using: :btree
 
   create_table "user_worksheet_attempts", force: :cascade do |t|
     t.integer  "user_id",         limit: 4

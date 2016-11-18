@@ -67,6 +67,8 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
+    email_validator (1.5.0)
+      activemodel
     erubis (2.7.0)
     eventmachine (1.2.0.1)
     execjs (2.6.0)
@@ -202,6 +204,7 @@ DEPENDENCIES
   capistrano-rvm
   capistrano-thin
   devise
+  email_validator
   filterrific
   haml-rails
   jbuilder (~> 2.0)
