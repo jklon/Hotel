@@ -9,6 +9,7 @@ json.stream_id                              scq.stream_id
 json.chapter_id                             scq.chapter_id
 json.subject_id                             scq.subject_id
 json.standard_id                            scq.standard_id
+json.stream_id                              scq.stream_id
 json.hint_available                         scq.hint_available
 json.passage_footer                         scq.passage_footer
 json.passage                                scq.passage
