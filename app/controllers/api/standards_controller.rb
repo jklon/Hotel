@@ -1,7 +1,7 @@
 class Api::StandardsController < ApiController
   
   def get_standards
-    @standards = Standard.all
+    @standards = Standard.includes(:subjects).all
   end
 
 end

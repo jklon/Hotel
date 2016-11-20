@@ -25,6 +25,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :streams do 
+      collection do
+        get :get_streams
+      end
+    end
+
     resources :diagnostic_tests do 
       collection do
         get   :get_test
