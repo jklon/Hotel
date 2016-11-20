@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable
+  # devise :database_authenticatable, :registerable, :confirmable,
+  #        :recoverable, :rememberable, :trackable, :validatable
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: false, email: true, allow_blank: true
@@ -36,8 +36,15 @@ class User < ActiveRecord::Base
       return user if user
     end
 
-    user = User.create!(:number => user_params[:number], :first_name => user_params[:first_name],
-     :email => user_params[:email], :last_name => user_paramsp[:last_name])
+    if user_params[:email]
+      user = self.find_by_email(user_params[:email])
+      return user if user
+    end
+
+    user = User.create!(:first_name => user_params[:first_name],
+     :email => user_params[:email], :last_name => user_params[:last_name])
+    UserPhoneNumber.create(:number => user_params[:number], :user => user)
+    return user
 
   end
 
