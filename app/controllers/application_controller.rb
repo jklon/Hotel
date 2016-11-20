@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-
   def user_params_sane? user_params
+    return if user_params[:auth_token]
     unless user_params[:number]
       render json: {error: "no customer number"}, status: :unprocessable_entity
       return

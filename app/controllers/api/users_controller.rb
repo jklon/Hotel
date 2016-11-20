@@ -1,7 +1,6 @@
 class Api::UsersController < ApiController
   skip_before_action :authenticate_user!
-  before_action :user_params_sane?, only: [:register]
-  before_action -> { user_params_sane?(user_params) }, only: [:register]
+  before_action -> { user_params_sane?(user_params) },, only: [:register]
 
   def register
     @errors = User.find_existing_on_register(user_params)
@@ -10,9 +9,11 @@ class Api::UsersController < ApiController
       render 'api/error' and return
     end
 
-    if @user = User.build(user_params)
+    @user = User.new(user_params)
+    if @user.save
       render 'register_success'
     else
+      @errors = @user.errors
       render 'api/error'
     end
   end
