@@ -1,6 +1,6 @@
 class Api::UsersController < ApiController
   skip_before_action :authenticate_user!
-  before_action -> { user_params_sane?(user_params) },, only: [:register]
+  before_action -> { user_params_sane?(user_params) }, only: [:register]
 
   def register
     @errors = User.find_existing_on_register(user_params)
