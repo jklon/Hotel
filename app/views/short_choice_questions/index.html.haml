@@ -12,6 +12,8 @@
     = f.select :with_difficulty, @filterrific.select_options[:with_difficulty], { include_blank: '- Any -' }
     = f.label :level
     = f.select :with_level, @filterrific.select_options[:with_level], { include_blank: '- Any -' }
+    = f.label :question_id
+    = f.text_field :with_id
     = render_filterrific_spinner
     = f.submit 'Go'
     = link_to 'Reset Filters', reset_filterrific_url

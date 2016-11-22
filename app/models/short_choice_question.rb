@@ -19,8 +19,13 @@ class ShortChoiceQuestion < ActiveRecord::Base
       :with_subject_id,
       :with_difficulty,
       :with_level,
+      :with_id
     ]
   )
+
+  scope :with_id, lambda{ |query|
+    where(:id => query)
+  }
 
   scope :with_level, lambda {|query|
     where(:level => query)
