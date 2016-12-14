@@ -41,9 +41,8 @@ Rails.application.routes.draw do
     end
 
     resources :worksheet do 
-      collection do
-        get   :get_worksheet
-        post  :worksheet_attempt
+      collection do 
+        post  :worksheet_attempt,:get_worksheet,:get_intro
       end
     end
 
