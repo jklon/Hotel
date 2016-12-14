@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214215244) do
+ActiveRecord::Schema.define(version: 20161214224541) do
 
   create_table "Worksheet_scqs", force: :cascade do |t|
     t.integer  "short_choice_question_id", limit: 4
@@ -316,6 +316,15 @@ ActiveRecord::Schema.define(version: 20161214215244) do
 
   add_index "topics", ["code"], name: "index_topics_on_code", unique: true, using: :btree
   add_index "topics", ["stream_id"], name: "index_topics_on_stream_id", using: :btree
+
+  create_table "user_current_standings", force: :cascade do |t|
+    t.string   "entity_type", limit: 255
+    t.integer  "entity_id",   limit: 4
+    t.integer  "user_id",     limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "stream_id",   limit: 4
+  end
 
   create_table "user_entity_scores", force: :cascade do |t|
     t.integer  "user_id",     limit: 4

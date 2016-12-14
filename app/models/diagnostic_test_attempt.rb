@@ -2,7 +2,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
   belongs_to :user
   belongs_to :diagnostic_test
 
-  def evaluate_test question_answers
+  def evaluate_test(question_answers,user)
     stream_hash = {}
     ShortChoiceQuestion.where(:id => question_answers.keys).includes(:stream, :second_topic).each do |q|
       stream_hash[q.stream_id] ||= {'other_details' => {'stream_name' => q.stream.name}, 'second_topics' => {}}
@@ -16,6 +16,17 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         if ( not existing_lowest_position ) or ( new_lowest_position < existing_lowest_position.to_i )
           stream_hash[q.stream_id]['other_details']['lowest_second_topic_id'] = q.second_topic_id
           stream_hash[q.stream_id]['other_details']['lowest_position'] = new_lowest_position
+
+          puts user.email
+          userCurrentStanding = UserCurrentStanding.where(:user => user, :entity_type => 'SecondTopic', :stream_id =>q.stream_id).first
+          if (userCurrentStanding)
+            userCurrentStanding.update_columns(:entity_id =>q.second_topic_id)
+            userCurrentStanding.save!
+          else
+            UserCurrentStanding.create!(:user => user, :entity_type => 'SecondTopic', :stream_id =>q.stream_id,:entity_id =>q.second_topic_id)
+          end
+
+
         end
       end
     end

@@ -22,7 +22,7 @@ class Api::DiagnosticTestsController < ApiController
     end
 
     attempt = DiagnosticTestAttempt.create!(:user => @user, :diagnostic_test_id => params[:diagnostic_test][:id])
-    result = attempt.evaluate_test(params[:diagnostic_test][:short_choice_questions])
+    result = attempt.evaluate_test(params[:diagnostic_test][:short_choice_questions],@user)
     render json: result.to_json, status: 200
   end
 
