@@ -55,6 +55,32 @@ class Api::WorksheetController < ApiController
     DifficultyLevel.where(:value => (params[:worksheet][:difficultywise_breakup]).keys).each do |level|
       DifficultywiseWorksheetBreakup.create!(:difficulty_level_id => level.id, :user_worksheet_attempt_id => attempt.id, :ques_content =>params[:worksheet][:difficultywise_breakup][level.id.to_s]['content'])
   	end
+    topic = SecondTopic.where(:id => second_topic).first
+
+    userChapterScore = UserEntityScore.where(:user => @user, :entity_type => 'Chapter', :entity_id =>topic.chapter_id).first
+    if (userChapterScore)
+      userChapterScore.update_columns(:high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+      userChapterScore.save!
+    else
+      UserEntityScore.create!(:user => @user, :entity_type => 'Chapter', :entity_id =>topic.chapter_id, :high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+    end
+
+    userTopicScore = UserEntityScore.where(:user => @user, :entity_type => 'SecondTopic', :entity_id =>topic.id).first
+    if (userTopicScore)
+      userTopicScore.update_columns(:high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+      userTopicScore.save!
+    else
+      UserEntityScore.create!(:user => @user, :entity_type => 'SecondTopic', :entity_id =>topic.id, :high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+    end
+
+    userStreamScore = UserEntityScore.where(:user => @user, :entity_type => 'Stream', :entity_id =>topic.stream_id).first
+    if (userStreamScore)
+      userStreamScore.update_columns(:high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+      userStreamScore.save!
+    else
+      UserEntityScore.create!(:user => @user, :entity_type => 'Stream', :entity_id =>topic.stream_id, :high_score=>attempt.score, :diamonds=>attempt.diamonds,:attempted=>attempt.attempted,:proficiency=>attempt.proficiency)
+    end
+    
   	
   	render json: result.to_json, status: 200 and return
   end

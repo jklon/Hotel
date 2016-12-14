@@ -46,6 +46,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :homepage do 
+      collection do 
+        post  :get_streamwise_score
+      end
+    end
+
     resources :users do
       collection do
         post :register

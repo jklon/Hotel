@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214062228) do
+ActiveRecord::Schema.define(version: 20161214215244) do
 
   create_table "Worksheet_scqs", force: :cascade do |t|
     t.integer  "short_choice_question_id", limit: 4
@@ -319,7 +319,7 @@ ActiveRecord::Schema.define(version: 20161214062228) do
 
   create_table "user_entity_scores", force: :cascade do |t|
     t.integer  "user_id",     limit: 4
-    t.string   "entity_name", limit: 255
+    t.string   "entity_type", limit: 255
     t.integer  "entity_id",   limit: 4
     t.integer  "high_score",  limit: 4
     t.integer  "diamonds",    limit: 4
@@ -331,7 +331,7 @@ ActiveRecord::Schema.define(version: 20161214062228) do
   end
 
   add_index "user_entity_scores", ["entity_id"], name: "index_user_entity_scores_on_entity_id", using: :btree
-  add_index "user_entity_scores", ["entity_name"], name: "index_user_entity_scores_on_entity_name", using: :btree
+  add_index "user_entity_scores", ["entity_type"], name: "index_user_entity_scores_on_entity_type", using: :btree
   add_index "user_entity_scores", ["user_id"], name: "index_user_entity_scores_on_user_id", using: :btree
 
   create_table "user_phone_numbers", force: :cascade do |t|
