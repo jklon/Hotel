@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     resources :worksheet do 
       collection do
         get   :get_worksheet
+        post  :worksheet_attempt
       end
     end
 
