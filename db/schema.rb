@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161120183959) do
+ActiveRecord::Schema.define(version: 20161213160401) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -360,8 +360,10 @@ ActiveRecord::Schema.define(version: 20161120183959) do
     t.integer  "short_choice_question_id", limit: 4
     t.integer  "position",                 limit: 4
     t.integer  "worksheet_id",             limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "question_id",              limit: 4
+    t.string   "question_type",            limit: 255
   end
 
   add_index "worksheet_scqs", ["position"], name: "index_worksheet_scqs_on_position", using: :btree

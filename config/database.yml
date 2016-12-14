@@ -4,13 +4,13 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password: 
+  password: password 
   host: localhost
 
 development:
   <<: *default
   username: root
-  password: 
+  password: password
   database: hotel_development
 
 # Warning: The database defined as "test" will be erased and

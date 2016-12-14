@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
 
   
+  get 'worksheet/get_worksheet'
+
   devise_for :users
   get 'short_choice_questions/index'
   root to: "home#index"
@@ -35,6 +37,12 @@ Rails.application.routes.draw do
       collection do
         get   :get_test
         post  :test_attempt
+      end
+    end
+
+    resources :worksheet do 
+      collection do
+        get   :get_worksheet
       end
     end
 

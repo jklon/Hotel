@@ -1,7 +1,7 @@
 class Api::StreamsController < ApiController
   
   def get_streams
-    @streams = Stream.all
+    @streams = Stream.where("name LIKE :prefix", prefix: "s%")
   end
 
 end
