@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   has_many :user_phone_numbers
   has_many :diagnostic_test_attempts
+  has_many :user_current_standings
   has_many :diagnostic_test, through: :diagnostic_test_attempts
 
   def find_existing_on_register user_params

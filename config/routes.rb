@@ -48,7 +48,7 @@ Rails.application.routes.draw do
 
     resources :homepage do 
       collection do 
-        post  :get_streamwise_score
+        post  :get_streamwise_score, :get_streamwise_score_short
       end
     end
 

@@ -10,7 +10,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       stream_hash[q.stream_id]['second_topics'][q.second_topic_id] = {'score' => question_answers[q.id.to_s]['score'],
       'second_topic_name' => q.second_topic.name}
       
-      if question_answers[q.id.to_s]['score'] == 0
+      if question_answers[q.id.to_s]['score'] == "0"
         new_lowest_position = q.second_topic.stream_position
         existing_lowest_position = stream_hash[q.stream_id]['other_details']['lowest_position']
         if ( not existing_lowest_position ) or ( new_lowest_position < existing_lowest_position.to_i )
