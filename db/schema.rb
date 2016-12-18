@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 20161218113437) do
     t.datetime "updated_at",                             null: false
     t.string   "label",                    limit: 255
     t.string   "image",                    limit: 255
+    t.text     "answer_text_old",          limit: 65535
   end
 
   add_index "short_choice_answers", ["short_choice_question_id"], name: "index_short_choice_answers_on_short_choice_question_id", using: :btree
