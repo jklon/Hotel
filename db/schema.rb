@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161120183959) do
+ActiveRecord::Schema.define(version: 20161218113437) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(version: 20161120183959) do
     t.integer  "reference_solving_time",     limit: 4
     t.boolean  "include_in_diagnostic_test"
     t.integer  "second_topic_id",            limit: 4
+    t.text     "question_text_old",          limit: 65535
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
