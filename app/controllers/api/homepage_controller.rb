@@ -23,7 +23,7 @@ class Api::HomepageController < ApiController
       stream_score_value = {'score'=>stream_score.high_score,'diamonds'=>stream_score.diamonds, 'proficiency'=>stream_score.proficiency} if(stream_score)
 	  
       #Creating stream object
-	  stream_element = {'id'=>stream.id,'name'=>stream.name,'score'=>stream_score_value, 'topics'=> []}
+	  stream_element = {'id'=>stream.id,'name'=>stream.name,'scorecard'=>stream_score_value, 'topics'=> []}
 	  current_topic = UserCurrentStanding.where(:stream_id=>stream.id, :user_id => 4,:entity_type => "SecondTopic").first
 	  
 	  #If this stream was ever attempted by user
@@ -36,7 +36,7 @@ class Api::HomepageController < ApiController
           topic_score_value = {'score'=>stream_score.high_score,'diamonds'=>stream_score.diamonds, 'proficiency'=>stream_score.proficiency} if(topic_score)
 	      
           #Creating topic object
-	      topic_element = {'id'=>topic.id,'name'=>topic.name,'score'=>topic_score_value}
+	      topic_element = {'id'=>topic.id,'name'=>topic.name,'scorecard'=>topic_score_value}
 	  	  stream_element["topics"].push(topic_element);
 	    end
 	    
