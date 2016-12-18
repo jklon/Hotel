@@ -27,9 +27,9 @@
 }
 
 .edit_scq_btn{
-  position: absolute;
-  top:0;
-  right: 0
+  position: relative;
+  top: 4px;
+  left: 5px;
 }
 
 .edit_scq_form select{
@@ -38,4 +38,8 @@
 }
 .edit_scq_form input{
   float: right
+}
+
+.hidden_scq_text_edit{
+  display: none;
 }

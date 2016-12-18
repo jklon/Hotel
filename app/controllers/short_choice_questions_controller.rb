@@ -36,7 +36,8 @@ class ShortChoiceQuestionsController < ApplicationController
   private
 
   def short_choice_question_params
-    params.require(:short_choice_question).permit(:reference_solving_time, :level, :difficulty, :include_in_diagnostic_test, :topic_id)
+    params.require(:short_choice_question).permit(:reference_solving_time, :level, :difficulty, :include_in_diagnostic_test,
+     :topic_id, :question_text, :id, {:short_choice_answers_attributes => [:answer_text, :label, :id]})
   end
 
   def find_short_choice_question

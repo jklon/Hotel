@@ -9,6 +9,7 @@ class ShortChoiceQuestion < ActiveRecord::Base
   belongs_to :sub_topic
   has_many :diagnostic_test_questions, :as => :question
   has_many :diagnostic_tests, :through => :diagnostic_test_questions
+  accepts_nested_attributes_for :short_choice_answers, :allow_destroy => true
 
   filterrific(
     default_filter_params: { with_difficulty: 'easy' },

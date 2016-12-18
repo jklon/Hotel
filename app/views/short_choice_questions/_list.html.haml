@@ -1,26 +1,36 @@
 - questions.each do |q|
-  .row.scq_question_row
-    %p.bold= 'Question'
-    .col-xs-8
-      .scq_entry
-        .scq_question
-          %p 
-            = q.question_text.html_safe
+  = form_for q, :remote => true do |f|
+    .row.scq_question_row
+      %p.bold
+        = 'Question'
+        %span.glyphicon.glyphicon-pencil.grey.edit_scq_btn
+      .col-xs-8
+        .scq_entry
+          .scq_question
+            %p 
+              = q.question_text.html_safe
 
-          - if q.question_image
-            %p= image_tag q.question_image
+            - if q.question_image
+              %p= image_tag q.question_image
 
-        / %span.glyphicon.glyphicon-pencil.grey.edit_scq_btn
+          .scq_answers  
+            - if q.short_choice_answers.count > 0
+              - q.short_choice_answers.each do |ans|
+                %p
+                  %span.options_label= ans.label
+                  %span.options_text= ans.answer_text
 
-        .scq_answers  
-          - if q.short_choice_answers.count > 0
-            - q.short_choice_answers.each do |ans|
-              %p
-                %span.options_label= ans.label
-                %span.options_text= ans.answer_text
-    .col-xs-4
-      .edit_scq_form
-        = form_for q, :remote => true do |f|
+        .hidden_scq_text_edit
+          = f.text_area :question_text, :cols => "50", :rows => "5"
+          = f.fields_for :short_choice_answers do |sca|
+            %p
+              %span.options_label
+                = sca.text_field :label, :size=>"2"
+              %span.options_text
+                = sca.text_field :answer_text
+
+      .col-xs-4
+        .edit_scq_form
           .block_field_without_margin
             = f.label :reference_time
             = f.text_field :reference_solving_time, class: 'small_text_field'
