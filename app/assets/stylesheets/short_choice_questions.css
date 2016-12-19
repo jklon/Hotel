@@ -43,3 +43,8 @@
 .hidden_scq_text_edit{
   display: none;
 }
+
+.old_question_text_div{
+  /*display: inline;*/
+  margin-left: 5px;
+}

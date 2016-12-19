@@ -6,8 +6,13 @@ $(document).ready(function(){
   add_option_listeners()
 
   $(".edit_scq_btn").on("click", function(){
-    $(this).parent().parent().find(".hidden_scq_text_edit").css("display", 'initial');
+    $(this).parent().parent().parent().find(".hidden_scq_text_edit").css("display", 'initial');
     // $(".hidden_scq_text_edit").css("display", "initial")
+  })
+
+  $(".old-question-modal-link").on("click", function(){
+    console.log($(this).parent().find(".hidden").html());
+    $("#main-modal-body").html("").html($(this).parent().find(".hidden").html())
   })
 
 })

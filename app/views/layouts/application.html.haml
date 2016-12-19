@@ -48,6 +48,19 @@
             / - else
             /   %li= link_to 'Login', new_user_session_path
 
+    / #main-modal
+    /   #main-modal-overlay
+    /   #main-modal-content
+    /     #main-modal-header
+    /     #main-modal-body
+    /     #main-modal-footer
+
+    .modal.fade{ :tabindex => "-1", :role => "dialog", :id => "main-modal"}
+      .modal-dialog{ :role=>"document"}
+        .modal-content
+          .modal-header#main-modal-header
+          .modal-body#main-modal-body
+          .modal-footer#main-modal-footer
 
 
     .row

@@ -1,9 +1,18 @@
 - questions.each do |q|
   = form_for q, :remote => true do |f|
     .row.scq_question_row
-      %p.bold
-        = 'Question'
-        %span.glyphicon.glyphicon-pencil.grey.edit_scq_btn
+      %div
+        .bold.inline
+          = 'Question'
+          %span.glyphicon.glyphicon-pencil.grey.edit_scq_btn.pointer
+        .old_question_text_div.inline
+          %a{ 'class' => 'old-question-modal-link pointer', 'data-toggle'=>"modal", 'data-target'=>"#main-modal"}
+            = 'Old question'
+          .hidden
+            %p= q.question_text_old  
+            - if q.short_choice_answers.count > 0
+              - q.short_choice_answers.each do |ans|
+                %p= ans.answer_text_old
       .col-xs-8
         .scq_entry
           .scq_question
