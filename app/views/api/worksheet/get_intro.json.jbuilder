@@ -4,9 +4,19 @@ if @worksheet.subject
     json.partial! 'api/subjects/show',  subject: @worksheet.subject
   end
 end
+if @worksheet.standard
+  json.standard do
+    json.partial! 'api/standards/show',  standard: @worksheet.standard
+  end
+end
 if @worksheet.stream
   json.stream do
     json.partial! 'api/streams/show',  stream: @worksheet.stream
+  end
+end
+if @worksheet.chapter
+  json.chapter do
+    json.partial! 'api/chapters/show',  chapter: @worksheet.chapter
   end
 end
 if @worksheet.second_topic

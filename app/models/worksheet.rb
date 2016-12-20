@@ -3,6 +3,7 @@ class Worksheet < ActiveRecord::Base
   belongs_to :subject
   belongs_to :stream
   belongs_to :second_topic
+  belongs_to :chapter
   has_many :worksheet_scqs
   has_many :worksheet_attempts
   has_many :difficultywise_worksheet_breakup
