@@ -9,6 +9,13 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       stream_hash[q.stream_id]['second_topics'][q.second_topic_id] ||= {}
       stream_hash[q.stream_id]['second_topics'][q.second_topic_id] = {'score' => question_answers[q.id.to_s]['score'],
       'second_topic_name' => q.second_topic.name}
+      if !stream_hash[q.stream_id]['other_details'].has_key?("question_count") # will now return true or false
+        stream_hash[q.stream_id]['other_details']["question_count"] = 1
+        stream_hash[q.stream_id]['other_details']["total_score"] = question_answers[q.id.to_s]['score'].to_i
+      else
+        stream_hash[q.stream_id]['other_details']["question_count"] += 1
+        stream_hash[q.stream_id]['other_details']["total_score"] += question_answers[q.id.to_s]['score'].to_i
+      end
       
       if question_answers[q.id.to_s]['score'] == "0"
         new_lowest_position = q.second_topic.stream_position
@@ -29,7 +36,9 @@ class DiagnosticTestAttempt < ActiveRecord::Base
 
         end
       end
+      stream_hash[q.stream_id]['other_details']["average_score"] = (stream_hash[q.stream_id]['other_details']["total_score"].to_f)/(stream_hash[q.stream_id]['other_details']["question_count"])
     end
+
     return stream_hash
   end
 end
