@@ -1,0 +1,6 @@
+json.score worksheet_attempt.score
+json.diamonds worksheet_attempt.diamonds
+json.attempted worksheet_attempt.attempted
+json.proficiency worksheet_attempt.proficiency
+json.win worksheet_attempt.win
+json.defeat_level worksheet_attempt.defeat_level

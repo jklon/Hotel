@@ -5,5 +5,5 @@ class Standard < ActiveRecord::Base
   has_many :second_topics
   has_many :sub_topics
   has_many :extra_marks_questions
-  has_many :user_scores, as: :entity
+  has_many :user_entity_scores, as: :entity
 end

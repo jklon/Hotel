@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
 
   
+  get 'worksheet/get_worksheet'
+
   devise_for :users
   get 'short_choice_questions/index'
   root to: "home#index"
@@ -35,6 +37,18 @@ Rails.application.routes.draw do
       collection do
         get   :get_test
         post  :test_attempt
+      end
+    end
+
+    resources :worksheet do 
+      collection do 
+        post  :worksheet_attempt,:get_worksheet,:get_intro
+      end
+    end
+
+    resources :homepage do 
+      collection do 
+        post  :get_streamwise_score, :get_streamwise_score_short
       end
     end
 

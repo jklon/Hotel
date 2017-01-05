@@ -11,7 +11,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218113437) do
+ActiveRecord::Schema.define(version: 20161214224541) do
+
+  create_table "Worksheet_scqs", force: :cascade do |t|
+    t.integer  "short_choice_question_id", limit: 4
+    t.integer  "position",                 limit: 4
+    t.integer  "worksheet_id",             limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "question_id",              limit: 4
+    t.string   "question_type",            limit: 255
+  end
+
+  add_index "worksheet_scqs", ["position"], name: "index_worksheet_scqs_on_position", using: :btree
+  add_index "worksheet_scqs", ["short_choice_question_id"], name: "index_worksheet_scqs_on_short_choice_question_id", using: :btree
+  add_index "worksheet_scqs", ["worksheet_id"], name: "index_worksheet_scqs_on_worksheet_id", using: :btree
+
+  create_table "Worksheets", force: :cascade do |t|
+    t.integer  "topic_id",        limit: 4
+    t.integer  "second_topic_id", limit: 4
+    t.boolean  "active"
+    t.integer  "difficulty",      limit: 4
+    t.integer  "chapter_id",      limit: 4
+    t.integer  "stream_id",       limit: 4
+    t.integer  "standard_id",     limit: 4
+    t.integer  "subject_id",      limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "worksheets", ["active"], name: "index_worksheets_on_active", using: :btree
+  add_index "worksheets", ["chapter_id"], name: "index_worksheets_on_chapter_id", using: :btree
+  add_index "worksheets", ["difficulty"], name: "index_worksheets_on_difficulty", using: :btree
+  add_index "worksheets", ["second_topic_id"], name: "index_worksheets_on_second_topic_id", using: :btree
+  add_index "worksheets", ["standard_id"], name: "index_worksheets_on_standard_id", using: :btree
+  add_index "worksheets", ["stream_id"], name: "index_worksheets_on_stream_id", using: :btree
+  add_index "worksheets", ["subject_id"], name: "index_worksheets_on_subject_id", using: :btree
+  add_index "worksheets", ["topic_id"], name: "index_worksheets_on_topic_id", using: :btree
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -73,6 +109,14 @@ ActiveRecord::Schema.define(version: 20161218113437) do
     t.integer  "value",      limit: 4
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "difficultywise_worksheet_breakups", force: :cascade do |t|
+    t.integer  "ques_content",              limit: 4
+    t.integer  "difficulty_level_id",       limit: 4
+    t.integer  "user_worksheet_attempt_id", limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   create_table "extra_marks_answers", force: :cascade do |t|
@@ -275,9 +319,18 @@ ActiveRecord::Schema.define(version: 20161218113437) do
   add_index "topics", ["code"], name: "index_topics_on_code", unique: true, using: :btree
   add_index "topics", ["stream_id"], name: "index_topics_on_stream_id", using: :btree
 
+  create_table "user_current_standings", force: :cascade do |t|
+    t.string   "entity_type", limit: 255
+    t.integer  "entity_id",   limit: 4
+    t.integer  "user_id",     limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "stream_id",   limit: 4
+  end
+
   create_table "user_entity_scores", force: :cascade do |t|
     t.integer  "user_id",     limit: 4
-    t.string   "entity_name", limit: 255
+    t.string   "entity_type", limit: 255
     t.integer  "entity_id",   limit: 4
     t.integer  "high_score",  limit: 4
     t.integer  "diamonds",    limit: 4
@@ -289,7 +342,7 @@ ActiveRecord::Schema.define(version: 20161218113437) do
   end
 
   add_index "user_entity_scores", ["entity_id"], name: "index_user_entity_scores_on_entity_id", using: :btree
-  add_index "user_entity_scores", ["entity_name"], name: "index_user_entity_scores_on_entity_name", using: :btree
+  add_index "user_entity_scores", ["entity_type"], name: "index_user_entity_scores_on_entity_type", using: :btree
   add_index "user_entity_scores", ["user_id"], name: "index_user_entity_scores_on_user_id", using: :btree
 
   create_table "user_phone_numbers", force: :cascade do |t|
@@ -357,39 +410,5 @@ ActiveRecord::Schema.define(version: 20161218113437) do
 
   add_index "worksheet_difficulty_levels", ["difficulty_level_id"], name: "index_worksheet_difficulty_levels_on_difficulty_level_id", using: :btree
   add_index "worksheet_difficulty_levels", ["worksheet_id"], name: "index_worksheet_difficulty_levels_on_worksheet_id", using: :btree
-
-  create_table "worksheet_scqs", force: :cascade do |t|
-    t.integer  "short_choice_question_id", limit: 4
-    t.integer  "position",                 limit: 4
-    t.integer  "worksheet_id",             limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-  end
-
-  add_index "worksheet_scqs", ["position"], name: "index_worksheet_scqs_on_position", using: :btree
-  add_index "worksheet_scqs", ["short_choice_question_id"], name: "index_worksheet_scqs_on_short_choice_question_id", using: :btree
-  add_index "worksheet_scqs", ["worksheet_id"], name: "index_worksheet_scqs_on_worksheet_id", using: :btree
-
-  create_table "worksheets", force: :cascade do |t|
-    t.integer  "topic_id",        limit: 4
-    t.integer  "second_topic_id", limit: 4
-    t.boolean  "active"
-    t.integer  "difficulty",      limit: 4
-    t.integer  "chapter_id",      limit: 4
-    t.integer  "stream_id",       limit: 4
-    t.integer  "standard_id",     limit: 4
-    t.integer  "subject_id",      limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "worksheets", ["active"], name: "index_worksheets_on_active", using: :btree
-  add_index "worksheets", ["chapter_id"], name: "index_worksheets_on_chapter_id", using: :btree
-  add_index "worksheets", ["difficulty"], name: "index_worksheets_on_difficulty", using: :btree
-  add_index "worksheets", ["second_topic_id"], name: "index_worksheets_on_second_topic_id", using: :btree
-  add_index "worksheets", ["standard_id"], name: "index_worksheets_on_standard_id", using: :btree
-  add_index "worksheets", ["stream_id"], name: "index_worksheets_on_stream_id", using: :btree
-  add_index "worksheets", ["subject_id"], name: "index_worksheets_on_subject_id", using: :btree
-  add_index "worksheets", ["topic_id"], name: "index_worksheets_on_topic_id", using: :btree
 
 end

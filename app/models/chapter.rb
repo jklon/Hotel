@@ -8,6 +8,8 @@ class Chapter < ActiveRecord::Base
   validates :name, presence: true
   has_many :short_choice_questions
   has_many :extra_marks_questions
-  has_many :user_scores, as: :entity
+  has_many :user_entity_scores, as: :entity
+  has_many :user_current_standings, as: :entity
+  
 end
 
