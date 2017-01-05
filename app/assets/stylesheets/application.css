@@ -35,3 +35,15 @@
 .bold{
   font-weight: bold
 }
+.hidden{
+  display: none;
+}
+.inline{
+  display: inline
+}
+.pointer{
+  cursor: pointer;
+}
+
+
+

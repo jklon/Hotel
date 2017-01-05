@@ -9,6 +9,9 @@ class ShortChoiceQuestion < ActiveRecord::Base
   belongs_to :sub_topic
   has_many :diagnostic_test_questions, :as => :question
   has_many :diagnostic_tests, :through => :diagnostic_test_questions
+  accepts_nested_attributes_for :short_choice_answers, :allow_destroy => true
+
+  before_update :copy_question_text
 
   filterrific(
     default_filter_params: { with_difficulty: 'easy' },
@@ -77,6 +80,12 @@ class ShortChoiceQuestion < ActiveRecord::Base
       Topic.all.pluck(:name, :id)
     else
       Topic.where(:chapter_id => chapter_id).pluck(:name, :id)
+    end
+  end
+
+  def copy_question_text
+    if question_text_changed?
+      self.question_text_old = question_text_was
     end
   end
 
