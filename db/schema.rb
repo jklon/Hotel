@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214224541) do
+ActiveRecord::Schema.define(version: 20170105170019) do
 
   create_table "Worksheet_scqs", force: :cascade do |t|
     t.integer  "short_choice_question_id", limit: 4
@@ -76,6 +76,28 @@ ActiveRecord::Schema.define(version: 20161214224541) do
 
   add_index "chapters", ["code"], name: "index_chapters_on_code", unique: true, using: :btree
   add_index "chapters", ["stream_id"], name: "index_chapters_on_stream_id", using: :btree
+
+  create_table "diagnostic_test_attempt_scq_scas", force: :cascade do |t|
+    t.integer  "diagnostic_test_attempt_scq_id", limit: 4
+    t.integer  "short_choice_answer_id",         limit: 4
+    t.float    "time_spent",                     limit: 24
+    t.integer  "attempt_order",                  limit: 4
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  create_table "diagnostic_test_attempt_scqs", force: :cascade do |t|
+    t.integer  "diagnostic_test_attempt_id", limit: 4
+    t.integer  "short_choice_question_id",   limit: 4
+    t.integer  "short_choice_answer_id",     limit: 4
+    t.float    "time_spent",                 limit: 24
+    t.integer  "attempt",                    limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "diagnostic_test_attempt_scqs", ["diagnostic_test_attempt_id"], name: "index_diagnostic_test_attempt_scqs_on_diagnostic_test_attempt_id", using: :btree
+  add_index "diagnostic_test_attempt_scqs", ["short_choice_question_id"], name: "index_diagnostic_test_attempt_scqs_on_short_choice_question_id", using: :btree
 
   create_table "diagnostic_test_attempts", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -339,6 +361,8 @@ ActiveRecord::Schema.define(version: 20161214224541) do
     t.integer  "proficiency", limit: 4
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "test_type",   limit: 255
+    t.integer  "test_id",     limit: 4
   end
 
   add_index "user_entity_scores", ["entity_id"], name: "index_user_entity_scores_on_entity_id", using: :btree
