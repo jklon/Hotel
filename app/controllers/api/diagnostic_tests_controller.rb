@@ -4,7 +4,7 @@ class Api::DiagnosticTestsController < ApiController
 
   def get_test
     @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers])
-    .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id]).first
+    .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id])[params[:diagnostic_test].to_i-1]
   end
 
   def test_attempt
@@ -22,7 +22,7 @@ class Api::DiagnosticTestsController < ApiController
     end
 
     attempt = DiagnosticTestAttempt.create!(:user => @user, :diagnostic_test_id => params[:diagnostic_test][:id])
-    result = attempt.evaluate_test(params[:diagnostic_test][:short_choice_questions],@user)
+    result = attempt.evaluate_test(params[:diagnostic_test][:short_choice_questions],@user,attempt)
     render json: result.to_json, status: 200
   end
 
