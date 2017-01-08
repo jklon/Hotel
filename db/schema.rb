@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105170019) do
+ActiveRecord::Schema.define(version: 20170107071036) do
 
   create_table "Worksheet_scqs", force: :cascade do |t|
     t.integer  "short_choice_question_id", limit: 4
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20170105170019) do
     t.integer  "attempt",                    limit: 4
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.float    "score",                      limit: 24
   end
 
   add_index "diagnostic_test_attempt_scqs", ["diagnostic_test_attempt_id"], name: "index_diagnostic_test_attempt_scqs_on_diagnostic_test_attempt_id", using: :btree
@@ -249,6 +250,7 @@ ActiveRecord::Schema.define(version: 20170105170019) do
     t.boolean  "include_in_diagnostic_test"
     t.integer  "second_topic_id",            limit: 4
     t.text     "question_text_old",          limit: 65535
+    t.integer  "source_id",                  limit: 4
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree

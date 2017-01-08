@@ -17,7 +17,8 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       # puts question_answers[q.id.to_s]['attempt'].to_i
       attempt_scq = DiagnosticTestAttemptScq.create!(:diagnostic_test_attempt => attempt,:short_choice_question => q,
         :time_spent => question_answers[q.id.to_s]['time_taken'].to_f, :attempt => question_answers[q.id.to_s]['attempt'].to_i,
-        :short_choice_answer_id => question_answers[q.id.to_s]['answer_selected'].to_i)
+        :short_choice_answer_id => question_answers[q.id.to_s]['answer_selected'].to_i, 
+        :score => question_answers[q.id.to_s]['score'].to_f)
         if (question_answers[q.id.to_s]['selected_answers'])
           ShortChoiceAnswer.where(:id => question_answers[q.id.to_s]['selected_answers'].keys).each do |a|
             # puts "Answer Details"
