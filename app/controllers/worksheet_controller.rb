@@ -10,5 +10,6 @@ class Api::WorksheetController < ApiController
     attempt = UserWorksheetAttempt.create!(:user => @user, :worksheet_id => params[:worksheet][:id])
     DifficultyLevel.where(:value => (params[:worksheet][:difficultywise_breakup]).keys).each do |level|
       DifficultywiseWorksheetBreakup.create!(:difficulty_level_id => level.id, :user_worksheet_attempt => attempt.id, :ques_content =>params[:worksheet][:difficultywise_breakup][level.id.to_s].value)
+    end
   end
 end
