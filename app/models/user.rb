@@ -32,9 +32,10 @@ class User < ActiveRecord::Base
       return user if user
     end
 
-    if user_params[:phone]
+    if user_params[:number]
       user = self.find_by_phone_number(user_params[:number])
       return user if user
+
     end
 
     if user_params[:email]
@@ -58,7 +59,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_phone_number number
-    if cph = CustomerPhoneNumber.find_by_number(number) and user = cph.user
+    if cph = UserPhoneNumber.find_by_number(number) and user = cph.user
       return user
     else
       return false
