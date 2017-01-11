@@ -1,0 +1,9 @@
+= form_for_filterrific @filterrific do |f|
+  .field
+    = f.label :search_query
+    = f.text_area :search_query
+    = f.submit "Go"
+    = link_to 'Reset Filters', reset_filterrific_url
+
+%br
+= render partial: 'list', locals: {daignostic_test_attempts: @daignostic_test_attempts}

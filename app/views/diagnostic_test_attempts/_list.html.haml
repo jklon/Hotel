@@ -1,0 +1,9 @@
+%table.table
+  %tr
+    %th User
+    %th Diagnostic test
+  - @diagnostic_test_attempts.each do |dta|
+    %tr
+      %td= link_to dta.user.first_name, diagnostic_test_attempt_path(:id => dta.id)
+      %td= dta.diagnostic_test_id
+
