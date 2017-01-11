@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'bootstrap-datepicker-rails'
 gem 'filterrific'
 gem 'will_paginate'
 gem 'devise'

@@ -13,7 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap.min
+//= require bootstrap-datepicker
 
-function test(element){
-  console.log("hi" || element);
-}
+$(document).ready(function(){
+  $('.datepicker').datepicker();
+});

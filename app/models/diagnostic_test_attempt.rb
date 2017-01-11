@@ -4,6 +4,19 @@ class DiagnosticTestAttempt < ActiveRecord::Base
   has_many :diagnostic_test_attempt_scqs
   has_many :short_choice_questions, :through => :diagnostic_test_attempt_scqs,
    :source => :question, :source_type => "ShortChoiceQuestion"
+
+  filterrific(
+    default_filter_params: { search_query: "date(created_at) = '#{Date.today.to_s(:db)}'" },
+    available_filters: [
+      :search_query,
+    ]
+  )
+
+  scope :search_query, lambda { |query|
+    where(query)
+  }
+
+
   def evaluate_test(question_answers,user,attempt)
     stream_hash = {}
     stream_score = {}

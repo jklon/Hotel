@@ -1,0 +1,11 @@
+%table.table
+  %tr
+    %th Question
+    %th Answer
+  - @dta.diagnostic_test_attempt_scqs.each do |dta_scq|
+    %tr
+      %td= dta_scq.short_choice_question.question_text.truncate(50)
+      - dta_scq.diagnostic_test_attempt_scq_scas.each do |ans|
+        %td= ans.short_choice_answer.answer_text
+        %td= ans.time_spent
+        %td= ans.attempt_order

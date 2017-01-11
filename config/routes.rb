@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
 
-  
+  resources :diagnostic_test_attempts
+
   get 'worksheet/get_worksheet'
 
   devise_for :users
