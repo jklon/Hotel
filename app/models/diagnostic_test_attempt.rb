@@ -19,7 +19,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
 
   def evaluate_test(question_answers,user,attempt)
     stream_hash = {}
-    stream_score = {}
+    second_topic_score = {}
     chapter_score = {}
     ShortChoiceQuestion.where(:id => question_answers.keys).includes(:stream, :second_topic).each do |q|
       #Create Rows in DiagnosticTestAttemptScq
@@ -46,8 +46,8 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       end
 
       #Adding To userEntityScore
-      UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>question_answers[q.id.to_s]['score'].to_i,:entity_id =>q.second_topic_id,
-          :test_type => 'Diagnostic', :test_id => attempt.id)
+      # UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>question_answers[q.id.to_s]['score'].to_i,:entity_id =>q.second_topic_id,
+      #     :test_type => 'Diagnostic', :test_id => attempt.id)
 
       #Start generating Response JSON
       stream_hash[q.stream_id] ||= {'other_details' => {'stream_name' => q.stream.name}, 'second_topics' => {}}
@@ -63,6 +63,18 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         stream_hash[q.stream_id]['other_details']["question_count"] += 1
         stream_hash[q.stream_id]['other_details']["total_score"] += question_answers[q.id.to_s]['score'].to_i
       end
+
+      puts second_topic_score
+      puts question_answers[q.id.to_s]['score'].to_i
+      if !second_topic_score.has_key?(q.second_topic_id)
+        second_topic_score[q.second_topic_id] ={}
+        second_topic_score[q.second_topic_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
+        second_topic_score[q.second_topic_id]["question_count"] = 1
+      else
+        second_topic_score[q.second_topic_id]["total_score"] += question_answers[q.id.to_s]['score'].to_i
+        second_topic_score[q.second_topic_id]["question_count"] += 1
+      end
+
 
       puts chapter_score
       puts question_answers[q.id.to_s]['score'].to_i
@@ -101,6 +113,12 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         average_score = value["other_details"]["total_score"].to_f/value["other_details"]["question_count"]
         puts average_score
         UserEntityScore.create!(:user => user, :entity_type => 'Stream', :high_score =>average_score.to_i,:entity_id =>key,
+          :test_type => 'Diagnostic', :test_id => attempt.id)
+      end
+      second_topic_score.each do |second_topic,value|
+        average_score = value["total_score"].to_f/value["question_count"]
+        puts average_score
+        UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>average_score.to_i,:entity_id =>second_topic,
           :test_type => 'Diagnostic', :test_id => attempt.id)
       end
       chapter_score.each do |chapter,value|
