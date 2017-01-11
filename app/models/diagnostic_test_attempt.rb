@@ -32,18 +32,18 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         :time_spent => question_answers[q.id.to_s]['time_taken'].to_f, :attempt => question_answers[q.id.to_s]['attempt'].to_i,
         :short_choice_answer_id => question_answers[q.id.to_s]['answer_selected'].to_i, 
         :score => question_answers[q.id.to_s]['score'].to_f)
-        if (question_answers[q.id.to_s]['selected_answers'])
-          ShortChoiceAnswer.where(:id => question_answers[q.id.to_s]['selected_answers'].keys).each do |a|
-            # puts "Answer Details"
-            # puts a.id
-            # puts question_answers[q.id.to_s]['selected_answers'][a.id.to_s]["time_taken"]
-            DiagnosticTestAttemptScqSca.create!(:diagnostic_test_attempt_scq => attempt_scq,:short_choice_answer => a,
-        :time_spent => question_answers[q.id.to_s]['selected_answers'][a.id.to_s]["time_taken"].to_f,
-         :attempt_order => question_answers[q.id.to_s]['selected_answers'][a.id.to_s]["index"].to_i)
-          end
-        else 
-          puts q.id
+      if (question_answers[q.id.to_s]['selected_answers'])
+        question_answers[q.id.to_s]['selected_answers'].keys.each do |a_id|
+          # puts "Answer Details"
+          # puts a.id
+          # puts question_answers[q.id.to_s]['selected_answers'][a.id.to_s]["time_taken"]
+          DiagnosticTestAttemptScqSca.create!(:diagnostic_test_attempt_scq => attempt_scq,:short_choice_answer_id => a_id,
+            :time_spent => question_answers[q.id.to_s]['selected_answers'][a_id.to_s]["time_taken"].to_f,
+            :attempt_order => question_answers[q.id.to_s]['selected_answers'][a_id.to_s]["index"].to_i)
         end
+      else 
+        puts q.id
+      end
 
       #Adding To userEntityScore
       UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>question_answers[q.id.to_s]['score'].to_i,:entity_id =>q.second_topic_id,

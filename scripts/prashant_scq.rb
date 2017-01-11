@@ -3,7 +3,7 @@ require 'rubyXL'
 book = RubyXL::Parser.parse('scripts/Prashant_Question.xlsx')
 scq_sheet = book[0]
 
-standard    = Standard.where(:standard_number => 6).first
+standard    = Standard.where(:standard_number => 7).first
 subject     = Subject.where(:standard => standard, :name => "Maths").first
 stream      =  Stream.first
 empty_row   = false
