@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170107071036) do
+ActiveRecord::Schema.define(version: 20170113175051) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -74,6 +74,17 @@ ActiveRecord::Schema.define(version: 20170107071036) do
   add_index "diagnostic_test_attempts", ["diagnostic_test_id"], name: "index_diagnostic_test_attempts_on_diagnostic_test_id", using: :btree
   add_index "diagnostic_test_attempts", ["user_id"], name: "index_diagnostic_test_attempts_on_user_id", using: :btree
 
+  create_table "diagnostic_test_personalizations", force: :cascade do |t|
+    t.integer  "user_id",            limit: 4
+    t.integer  "diagnostic_test_id", limit: 4
+    t.boolean  "attempted"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "diagnostic_test_personalizations", ["diagnostic_test_id"], name: "index_diagnostic_test_personalizations_on_diagnostic_test_id", using: :btree
+  add_index "diagnostic_test_personalizations", ["user_id"], name: "index_diagnostic_test_personalizations_on_user_id", using: :btree
+
   create_table "diagnostic_test_questions", force: :cascade do |t|
     t.string   "question_type",      limit: 255
     t.integer  "question_id",        limit: 4
@@ -83,12 +94,15 @@ ActiveRecord::Schema.define(version: 20170107071036) do
   end
 
   create_table "diagnostic_tests", force: :cascade do |t|
-    t.integer  "standard_id", limit: 4
-    t.integer  "subject_id",  limit: 4
-    t.string   "name",        limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "string_name", limit: 255
+    t.integer  "standard_id",                        limit: 4
+    t.integer  "subject_id",                         limit: 4
+    t.string   "name",                               limit: 255
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.string   "string_name",                        limit: 255
+    t.string   "test_type",                          limit: 255
+    t.integer  "diagnostic_test_personalization_id", limit: 4
+    t.integer  "personalization_type",               limit: 4
   end
 
   create_table "difficulty_levels", force: :cascade do |t|
@@ -437,4 +451,6 @@ ActiveRecord::Schema.define(version: 20170107071036) do
   add_index "worksheets", ["subject_id"], name: "index_worksheets_on_subject_id", using: :btree
   add_index "worksheets", ["topic_id"], name: "index_worksheets_on_topic_id", using: :btree
 
+  add_foreign_key "diagnostic_test_personalizations", "diagnostic_tests"
+  add_foreign_key "diagnostic_test_personalizations", "users"
 end

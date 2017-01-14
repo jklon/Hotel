@@ -19,5 +19,6 @@ diagnostic_test = DiagnosticTest.create(:standard_id => standard.id,:subject_id 
 Chapter.where(:standard_id => standard.id).each do |c|
   ids = c.short_choice_questions.pluck(:id)
   first = ids[rand(ids.count + 1)]
-  DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => first, :diagnostic_test_id => diagnostic_test.id) if first
+  DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => first,
+   :diagnostic_test_id => diagnostic_test.id,, :diagnostic_test_type => "General") if first
 end
