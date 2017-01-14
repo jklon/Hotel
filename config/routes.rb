@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     resources :diagnostic_tests do 
       collection do
         get   :get_test
+        get   :get_attempt_details
         post  :test_attempt
       end
     end

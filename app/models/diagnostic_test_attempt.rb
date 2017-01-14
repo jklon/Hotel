@@ -17,10 +17,17 @@ class DiagnosticTestAttempt < ActiveRecord::Base
   }
 
 
+  
+
+
   def evaluate_test(question_answers,user,attempt)
     stream_hash = {}
     second_topic_score = {}
     chapter_score = {}
+    personalization = DiagnosticTestPersonalization.where(:id => attempt.diagnostic_test.diagnostic_test_personalization_id).first
+    personalization.update_columns(:attempted => true) if personalization
+    personalization.save if personalization
+
     ShortChoiceQuestion.where(:id => question_answers.keys).includes(:stream, :second_topic).each do |q|
       #Create Rows in DiagnosticTestAttemptScq
       #DiagnosticTestAttemptScq.create!(:diagnostic_test_attempt =>attempt,:short_choice_question => q, 
@@ -129,4 +136,80 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       end
     return stream_hash
   end
+  
+
+
+
+
+
+
+  def generate_personalized_test(user,attempt)
+    personalized = 0
+    incorrectCounter ={}
+    max_incorrect =0
+    personalized_test = DiagnosticTestPersonalization.where(:user=> user,:attempted => false).first
+    if personalized_test
+      puts "test already generated"
+      return 1
+    end
+    if attempt.diagnostic_test.test_type == "Chapterwise" 
+      DiagnosticTestAttemptScq.where(:diagnostic_test_attempt => attempt).each do |scq|
+        puts scq.short_choice_question.chapter_id
+        incorrectCounter[scq.short_choice_question.chapter_id]||={}
+        if !incorrectCounter[scq.short_choice_question.chapter_id].has_key?("total")
+          incorrectCounter[scq.short_choice_question.chapter_id]["total"] = 1
+          incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] = 1 if scq.attempt == 2
+          incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] = 0 if scq.attempt != 2
+        else
+          incorrectCounter[scq.short_choice_question.chapter_id]["total"] += 1
+          if scq.attempt == 2
+            incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] += 1 
+            max_incorrect = [incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"], max_incorrect].max
+          end
+        end
+      end
+
+      puts max_incorrect
+      puts incorrectCounter
+      if max_incorrect > 1
+        personalized_test = DiagnosticTestPersonalization.create(:user=> user,:attempted => false)
+        test = DiagnosticTest.create(:standard_id => attempt.diagnostic_test.standard_id, 
+          :subject_id => attempt.diagnostic_test.standard_id, :name=> "Random_Question", :test_type => "Topicwise", 
+          :diagnostic_test_personalization => personalized_test, :personalization_type => 1 )
+        incorrectCounter.each do |key, value|
+          if ( value["incorrect"].to_f / value["total"].to_f ) > 0.5
+            puts key
+            topic_ids = SecondTopic.where(:chapter_id => key).pluck(:id)
+            topic_count = [3, topic_ids.count].min
+            
+            while topic_count > 0 
+              topic_id = topic_ids[rand(topic_ids.count)]
+              question_ids = ShortChoiceQuestion.where(:second_topic_id => topic_id).pluck(:id)
+              question_count = [3, question_ids.count].min
+              
+              while question_count > 0 
+                question_id = question_ids[rand(question_ids.count)]
+                DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => question_id,
+                 :diagnostic_test_id => test.id)
+                question_ids.delete(question_id)
+                question_count = question_count -1
+              end
+              
+              topic_ids.delete(topic_id)
+              topic_count = topic_count -1
+            end
+          
+          end
+        end
+        personalized = 1
+      end
+    end
+    return personalized
+  end
+
+
+  private
+
+
 end
+

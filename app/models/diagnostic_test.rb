@@ -1,6 +1,7 @@
 class DiagnosticTest < ActiveRecord::Base
   belongs_to :standard
   belongs_to :subject
+  belongs_to :diagnostic_test_personalization
   has_many :diagnostic_test_questions
   has_many :diagnostic_test_attempts
   has_many :users, through: :diagnostic_test_attempts
