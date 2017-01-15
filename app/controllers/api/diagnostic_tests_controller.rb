@@ -40,7 +40,7 @@ class Api::DiagnosticTestsController < ApiController
       response["attempted"]["comment"] = "Hi, "+@user.first_name+", You last attempted test on "+test_attempt.created_at.to_s if test_attempt
 
       ##Setting Personalized flag
-      personalized = test_attempt.generate_personalized_test(@user,test_attempt) if test_attempt
+      personalized = test_attempt.generate_personalized_test(@user,test_attempt,true)["personalized"] if test_attempt
       if personalized  ==1
         response["standards"]||={}
         response["standards"]["standard_id"]= test_attempt.diagnostic_test.standard.id
