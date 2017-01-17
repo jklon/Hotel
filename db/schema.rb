@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170113175051) do
+ActiveRecord::Schema.define(version: 20170117185055) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(version: 20170113175051) do
     t.string   "test_type",                          limit: 255
     t.integer  "diagnostic_test_personalization_id", limit: 4
     t.integer  "personalization_type",               limit: 4
+    t.integer  "entity_id",                          limit: 4
+    t.string   "entity_type",                        limit: 255
   end
 
   create_table "difficulty_levels", force: :cascade do |t|

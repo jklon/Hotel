@@ -71,7 +71,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         stream_hash[q.stream_id]['other_details']["total_score"] += question_answers[q.id.to_s]['score'].to_i
       end
 
-      puts second_topic_score
+      puts "topic Score"+second_topic_score.to_s
       puts question_answers[q.id.to_s]['score'].to_i
       if !second_topic_score.has_key?(q.second_topic_id)
         second_topic_score[q.second_topic_id] ={}
@@ -83,7 +83,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       end
 
 
-      puts chapter_score
+      puts "chapter Score"+chapter_score.to_s
       puts question_answers[q.id.to_s]['score'].to_i
       if !chapter_score.has_key?(q.chapter_id)
         chapter_score[q.chapter_id] ={}
@@ -116,27 +116,34 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     end
       stream_hash.each do |key, value|
         average_score = value["other_details"]["total_score"].to_f/value["other_details"]["question_count"]
-        puts average_score
+        value["other_details"]["average_score"] = average_score
         UserEntityScore.create!(:user => user, :entity_type => 'Stream', :high_score =>average_score.to_i,:entity_id =>key,
           :test_type => 'Diagnostic', :test_id => attempt.id)
       end
       second_topic_score.each do |second_topic,value|
         average_score = value["total_score"].to_f/value["question_count"]
-        puts average_score
+        value["average_score"] = average_score
         UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>average_score.to_i,:entity_id =>second_topic,
           :test_type => 'Diagnostic', :test_id => attempt.id)
       end
       chapter_score.each do |chapter,value|
         average_score = value["total_score"].to_f/value["question_count"]
-        puts average_score
+        value["average_score"] = average_score
         UserEntityScore.create!(:user => user, :entity_type => 'Chapter', :high_score =>average_score.to_i,:entity_id =>chapter,
           :test_type => 'Diagnostic', :test_id => attempt.id)
       end
       response_hash ={}
-      response_hash["result"]||={}
-      response_hash["result"]=stream_hash
-      response_hash["weak_entity"]||={}
-      response_hash["weak_entity"] = get_weak_entity(attempt)
+
+    response_hash["result"]||={}
+    response_hash["result"]["streams"]||={}
+    response_hash["result"]["streams"]=stream_hash
+    response_hash["result"]["chapters"]||={}
+    response_hash["result"]["chapters"]=chapter_score
+    response_hash["result"]["second_topics"]||={}
+    response_hash["result"]["second_topics"]=second_topic_score
+
+    response_hash["weak_entity"]||={}
+    response_hash["weak_entity"] = get_weak_entity(attempt)
     return response_hash
   end
   
@@ -146,24 +153,30 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     incorrectCounter = {}
     max_incorrect =0
     DiagnosticTestAttemptScq.where(:diagnostic_test_attempt => attempt).each do |scq|
-      incorrectCounter[scq.short_choice_question.chapter_id]||={}
-      if !incorrectCounter[scq.short_choice_question.chapter_id].has_key?("total")
-        incorrectCounter[scq.short_choice_question.chapter_id]["total"] = 1
-        incorrectCounter[scq.short_choice_question.chapter_id]["name"] = scq.short_choice_question.chapter.name
-        incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] = 1 if scq.attempt == 2 || scq.attempt == 1
-        incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] = 0 if scq.attempt != 2
+      entity_id = scq.short_choice_question.chapter_id if attempt.diagnostic_test.test_type == "Chapterwise"
+      entity_name = scq.short_choice_question.chapter.name if attempt.diagnostic_test.test_type == "Chapterwise"
+      entity_id = scq.short_choice_question.second_topic_id if attempt.diagnostic_test.test_type == "Topicwise"
+      entity_name = scq.short_choice_question.second_topic.name if attempt.diagnostic_test.test_type == "Topicwise"
+      incorrectCounter[entity_id]||={}
+      if !incorrectCounter[entity_id].has_key?("total")
+        incorrectCounter[entity_id]["total"] = 1
+        incorrectCounter[entity_id]["name"] = entity_name
+        incorrectCounter[entity_id]["incorrect"] = 1 if scq.attempt == 2 || scq.attempt == 1
+        incorrectCounter[entity_id]["incorrect"] = 0 if scq.attempt != 2
       else
-        incorrectCounter[scq.short_choice_question.chapter_id]["total"] += 1
+        incorrectCounter[entity_id]["total"] += 1
         if scq.attempt == 2 || scq.attempt == 1
-          incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"] += 1 
-          max_incorrect = [incorrectCounter[scq.short_choice_question.chapter_id]["incorrect"], max_incorrect].max
+          incorrectCounter[entity_id]["incorrect"] += 1 
+          max_incorrect = [incorrectCounter[entity_id]["incorrect"], max_incorrect].max
         end
       end
     end
+      
     response_hash ={}
+    response_hash["entity_type"]=attempt.diagnostic_test.test_type
     response_hash["max_incorrect"]=max_incorrect
-    response_hash["result"]||={}
-    response_hash["result"]=incorrectCounter
+    response_hash["entity_list"]||={}
+    response_hash["entity_list"]=incorrectCounter
     return response_hash
   end
 
@@ -173,33 +186,30 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     personalized = 0
     incorrectCounter ={}
     max_incorrect =0
-    personalized_test = DiagnosticTestPersonalization.where(:user=> user,:attempted => false).first
-    if personalized_test
+    personalized_test_count = DiagnosticTestPersonalization.where(:user=> user,:attempted => false).count
+    if personalized_test_count > 0
       puts "test already generated"
-      incorrectCounter["personalized"]=1
+      incorrectCounter["personalized"]=personalized_test_count
       return incorrectCounter
     end
     if attempt.diagnostic_test.test_type == "Chapterwise" 
       incorrectCounter = get_weak_entity(attempt)
-
       max_incorrect = incorrectCounter["max_incorrect"]
-      incorrectCounter = incorrectCounter["result"]
+      incorrectCounter = incorrectCounter["entity_list"]
       puts incorrectCounter
       if (max_incorrect > 1) && generate
-        personalized_test = DiagnosticTestPersonalization.create(:user=> user,:attempted => false)
-        test = DiagnosticTest.create(:standard_id => attempt.diagnostic_test.standard_id, 
-          :subject_id => attempt.diagnostic_test.standard_id, :name=> "Random_Question", :test_type => "Topicwise", 
-          :diagnostic_test_personalization => personalized_test, :personalization_type => 1 )
         incorrectCounter.each do |key, value|
           if key.is_a? Integer
             if ( value["incorrect"].to_f / value["total"].to_f ) > 0.5
-              puts key
-              topic_ids = SecondTopic.where(:chapter_id => key).pluck(:id)
-              topic_count = [3, topic_ids.count].min
+              personalized += 1
+              personalized_test = DiagnosticTestPersonalization.create(:user=> user,:attempted => false)
+              test = DiagnosticTest.create(:standard_id => attempt.diagnostic_test.standard_id, 
+                :subject_id => attempt.diagnostic_test.standard_id, :name=> "Random_Question", :test_type => "Topicwise", 
+                :diagnostic_test_personalization => personalized_test, :personalization_type => 1,:entity_type =>"Chapter",
+                :entity_id => key )
               
-              while topic_count > 0 
-                topic_id = topic_ids[rand(topic_ids.count)]
-                question_ids = ShortChoiceQuestion.where(:second_topic_id => topic_id).pluck(:id)
+              SecondTopic.where(:chapter_id => key).each do |topic|
+                question_ids = ShortChoiceQuestion.where(:second_topic_id => topic.id).pluck(:id)
                 question_count = [3, question_ids.count].min
                 
                 while question_count > 0 
@@ -209,14 +219,12 @@ class DiagnosticTestAttempt < ActiveRecord::Base
                   question_ids.delete(question_id)
                   question_count = question_count -1
                 end
-                
-                topic_ids.delete(topic_id)
-                topic_count = topic_count -1
+
               end
             end
           end
         end
-        personalized = 1
+        
       end
     end
     incorrectCounter["personalized"]=personalized
