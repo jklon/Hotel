@@ -48,7 +48,7 @@ class Api::DiagnosticTestsController < ApiController
 
       ##Setting Personalized flag
       general_test_attempt = DiagnosticTestAttempt.where(:user_id => @user.id).joins(:diagnostic_test).where("diagnostic_tests.personalization_type = 0").last
-      personalized = general_test_attempt.generate_personalized_test(@user,general_test_attempt,true)["personalized"] if general_test_attempt
+      personalized = DiagnosticTestPersonalization.where(:user=> @user,:attempted => false).count if general_test_attempt
       if personalized>0
         response["standards"]||={}
         response["standards"]["standard_id"]= general_test_attempt.diagnostic_test.standard.id

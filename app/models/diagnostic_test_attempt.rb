@@ -114,25 +114,28 @@ class DiagnosticTestAttempt < ActiveRecord::Base
       end
       stream_hash[q.stream_id]['other_details']["average_score"] = (stream_hash[q.stream_id]['other_details']["total_score"].to_f)/(stream_hash[q.stream_id]['other_details']["question_count"])
     end
-      stream_hash.each do |key, value|
-        average_score = value["other_details"]["total_score"].to_f/value["other_details"]["question_count"]
-        value["other_details"]["average_score"] = average_score
-        UserEntityScore.create!(:user => user, :entity_type => 'Stream', :high_score =>average_score.to_i,:entity_id =>key,
-          :test_type => 'Diagnostic', :test_id => attempt.id)
-      end
-      second_topic_score.each do |second_topic,value|
-        average_score = value["total_score"].to_f/value["question_count"]
-        value["average_score"] = average_score
-        UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>average_score.to_i,:entity_id =>second_topic,
-          :test_type => 'Diagnostic', :test_id => attempt.id)
-      end
-      chapter_score.each do |chapter,value|
-        average_score = value["total_score"].to_f/value["question_count"]
-        value["average_score"] = average_score
-        UserEntityScore.create!(:user => user, :entity_type => 'Chapter', :high_score =>average_score.to_i,:entity_id =>chapter,
-          :test_type => 'Diagnostic', :test_id => attempt.id)
-      end
-      response_hash ={}
+    stream_hash.each do |key, value|
+      average_score = value["other_details"]["total_score"].to_f/value["other_details"]["question_count"]
+      value["other_details"]["average_score"] = average_score
+      UserEntityScore.create!(:user => user, :entity_type => 'Stream', :high_score =>average_score.to_i,:entity_id =>key,
+        :test_type => 'Diagnostic', :test_id => attempt.id)
+    end
+    second_topic_score.each do |second_topic,value|
+      average_score = value["total_score"].to_f/value["question_count"]
+      value["average_score"] = average_score
+      UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>average_score.to_i,:entity_id =>second_topic,
+        :test_type => 'Diagnostic', :test_id => attempt.id)
+    end
+    chapter_score.each do |chapter,value|
+      average_score = value["total_score"].to_f/value["question_count"]
+      value["average_score"] = average_score
+      UserEntityScore.create!(:user => user, :entity_type => 'Chapter', :high_score =>average_score.to_i,:entity_id =>chapter,
+        :test_type => 'Diagnostic', :test_id => attempt.id)
+    end
+
+    personalized_test_remaining = DiagnosticTestPersonalization.where(:user=> user,:attempted => false).count
+    personalized_test_remaining = attempt.generate_personalized_test( user,attempt,true)["personalized"] if attempt.diagnostic_test.test_type == "Chapterwise"
+    response_hash ={}
 
     response_hash["result"]||={}
     response_hash["result"]["streams"]||={}
@@ -144,6 +147,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
 
     response_hash["weak_entity"]||={}
     response_hash["weak_entity"] = get_weak_entity(attempt)
+    response_hash["personalized_test_remaining"] = personalized_test_remaining
     return response_hash
   end
   
