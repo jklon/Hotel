@@ -1,6 +1,7 @@
 class Api::DiagnosticTestsController < ApiController
   skip_before_action :authenticate_user!
   protect_from_forgery :except => :test_attempt
+  protect_from_forgery :except => :get_attempt_details
 
   def get_test
     personalized = 0
@@ -16,9 +17,15 @@ class Api::DiagnosticTestsController < ApiController
       end
     end
     if personalized ==0
-      @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers])
-      .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id],
-        :personalization_type => 0)[params[:diagnostic_test].to_i-1]
+      if params[:stream_id]
+        @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers])
+        .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id],
+          :personalization_type => 0,:entity_type => "Stream",:entity_id => params[:stream_id].to_i)[params[:diagnostic_test].to_i-1]
+      else
+        @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers])
+        .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id],
+          :personalization_type => 0)[params[:diagnostic_test].to_i-1]
+      end
     end
   end
 
@@ -28,42 +35,35 @@ class Api::DiagnosticTestsController < ApiController
     response["attempted"]||={}
     personalized = 0
     response["personalized"]||={}
-
-    user_number = UserPhoneNumber.find_by_number(params[:number])
-    if user_number 
+    number = UserPhoneNumber.find_by_number(params[:number])
+    if number
+      @user = number.user
       ##Getting User Details
-      @user = user_number.user
-      test_attempt = DiagnosticTestAttempt.where(:user_id => @user.id).last
+      user_number = params[:number]
+      last_test_attempt = DiagnosticTestAttempt.where(:user_id => @user.id).last
 
       ##Setting Attempted Flag
-      attempted = 1 if test_attempt
-      response["attempted"]["comment"] = "Hi, "+@user.first_name+", You last attempted test on "+test_attempt.created_at.to_s if test_attempt
+      attempted = 1 if last_test_attempt
+      response["attempted"]["comment"] = "Hi, "+@user.first_name+", You last attempted test on "+last_test_attempt.created_at.to_s if last_test_attempt
 
       ##Setting Personalized flag
-      personalized = test_attempt.generate_personalized_test(@user,test_attempt,true)["personalized"] if test_attempt
-      if personalized  ==1
+      general_test_attempt = DiagnosticTestAttempt.where(:user_id => @user.id).joins(:diagnostic_test).where("diagnostic_tests.personalization_type = 0").last
+      personalized = DiagnosticTestPersonalization.where(:user=> @user,:attempted => false).count if general_test_attempt
+      if personalized>0
         response["standards"]||={}
-        response["standards"]["standard_id"]= test_attempt.diagnostic_test.standard.id
-        response["standards"]["subject_id"] = test_attempt.diagnostic_test.standard.id
-        response["standards"]["standard_number"] = test_attempt.diagnostic_test.standard.standard_number
-        response["standards"]["name"] = test_attempt.diagnostic_test.standard.name
-        response["personalized"]["comment"] = "Hi, "+@user.first_name+", We have got a special test based on the result of your last test at "+test_attempt.created_at.to_s
+        response["standards"]["standard_id"]= general_test_attempt.diagnostic_test.standard.id
+        response["standards"]["subject_id"] = general_test_attempt.diagnostic_test.standard.id
+        response["standards"]["standard_number"] = general_test_attempt.diagnostic_test.standard.standard_number
+        response["standards"]["name"] = general_test_attempt.diagnostic_test.standard.name
+        response["personalized"]["comment"] = "Hi, "+@user.first_name+", We have got a special test based on the result of your last test at "+general_test_attempt.created_at.to_s
       end
     end
     
     if personalized == 0
-      response["standards"] = []
-      Standard.includes(:subjects).where(:standard_number => [6,7]).each do |standard|
-        payload ={}
-        payload["standard_id"] = standard.id
-        payload["subject_id"] = standard.id
-        payload["standard_number"] = standard.standard_number
-        payload["name"] = standard.name
-        response["standards"]<< payload
-      end
+      response = get_general_tests(response)
     end
     response["attempted"]["flag"] = attempted
-    response["personalized"]["flag"] = personalized
+    response["personalized"]["count"] = personalized
     render json: response.to_json, status: 200
   end
 
@@ -90,6 +90,28 @@ class Api::DiagnosticTestsController < ApiController
 
   def diagnostic_test_params
     params.require(:diagnostic_test).permit(:id, :name, :standard_id)
+  end
+  def get_general_tests(response)
+    response["standards"] = []
+    Standard.includes(:subjects).where(:standard_number => [6,7,8,9]).each do |standard|
+      payload ={}
+      payload["standard_id"] = standard.id
+      payload["subject_id"] = standard.id
+      payload["standard_number"] = standard.standard_number
+      payload["name"] = standard.name
+      payload["streams"]=[]
+      DiagnosticTest.where(:personalization_type => 0,:standard_id => standard.id,:entity_type => "Stream").each do |test|
+        stream = Stream.where(:id => test.entity_id).first
+        if stream
+          stream_payload = {}
+          stream_payload["name"] = stream.name 
+          stream_payload["id"] = stream.id
+          payload["streams"] << stream_payload
+        end
+      end
+      response["standards"]<< payload
+    end
+    return response
   end
 
 end
