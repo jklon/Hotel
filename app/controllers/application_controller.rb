@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
       return
     end
 
-    unless user_params[:number].length == 10
+    unless user_params[:number].to_s.length == 10
       render json: {error: "customer number is wrong. Enter 10 digit mobile number (without leading 0 or +91)"}, status: :unprocessable_entity
       return
     end

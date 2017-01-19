@@ -5,6 +5,9 @@ class Api::DiagnosticTestsController < ApiController
   def get_test
     @diagnostic_test = DiagnosticTest.includes(short_choice_questions: [:short_choice_answers])
     .where(:standard_id => params[:standard_id], :subject_id => params[:subject_id])[params[:diagnostic_test].to_i-1]
+    respond_to do |format|
+      format.json
+    end
   end
 
   def test_attempt
