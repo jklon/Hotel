@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rack-cors', :require => 'rack/cors'
 gem 'bootstrap-datepicker-rails'
 gem 'filterrific'
 gem 'will_paginate'
