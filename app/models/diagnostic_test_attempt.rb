@@ -89,9 +89,11 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         chapter_score[q.chapter_id] ={}
         chapter_score[q.chapter_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
         chapter_score[q.chapter_id]["question_count"] = 1
+        chapter_score[q.chapter_id]["name"] = q.chapter.name
       else
         chapter_score[q.chapter_id]["total_score"] += question_answers[q.id.to_s]['score'].to_i
         chapter_score[q.chapter_id]["question_count"] += 1
+        chapter_score[q.chapter_id]["name"] = q.chapter.name
       end
 
       
