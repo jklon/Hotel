@@ -268,10 +268,14 @@ class DiagnosticTestAttempt < ActiveRecord::Base
                 
                 while question_count > 0 
                   question_id = question_ids[rand(question_ids.count)]
-                  DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => question_id,
-                   :diagnostic_test_id => test.id)
-                  question_ids.delete(question_id)
-                  question_count = question_count -1
+                  puts "Answer count"
+                  puts ShortChoiceAnswer.where(:short_choice_question_id => question_id).count
+                  if (ShortChoiceAnswer.where(:short_choice_question_id => question_id).count >0)
+                    DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => question_id,
+                     :diagnostic_test_id => test.id)
+                    question_ids.delete(question_id)
+                    question_count = question_count -1
+                  end
                 end
 
               end
