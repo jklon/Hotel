@@ -24,6 +24,9 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     stream_hash = {}
     second_topic_score = {}
     chapter_score = {}
+
+    question_analysis = {}
+    difficulty_breakup ={}
     personalization = DiagnosticTestPersonalization.where(:id => attempt.diagnostic_test.diagnostic_test_personalization_id).first
     personalization.update_columns(:attempted => true) if personalization
     personalization.save if personalization
@@ -70,32 +73,72 @@ class DiagnosticTestAttempt < ActiveRecord::Base
         stream_hash[q.stream_id]['other_details']["question_count"] += 1
         stream_hash[q.stream_id]['other_details']["total_score"] += question_answers[q.id.to_s]['score'].to_i
       end
+      puts question_answers[q.id.to_s]['attempt'].to_i
+      difficulty_breakup["total"]||={}
+      difficulty_breakup["total"]["total"]||=0
+      difficulty_breakup["total"]["correct"]||=0
+      difficulty_breakup["total"]["incorrect"]||=0
+      difficulty_breakup["total"]["unattempted"]||=0
+      difficulty_breakup["total"]["total"]+=1
+      difficulty_breakup["total"]["correct"]+=1 if question_answers[q.id.to_s]['attempt'].to_i ==3
+      difficulty_breakup["total"]["incorrect"]+=1 if question_answers[q.id.to_s]['attempt'].to_i ==2
+      difficulty_breakup["total"]["unattempted"]+=1 if question_answers[q.id.to_s]['attempt'].to_i <2
+      if q.difficulty
+
+        difficulty_breakup[q.difficulty]||={}
+        if !difficulty_breakup[q.difficulty].has_key?("total")
+          difficulty_breakup[q.difficulty]["total"]=1
+          difficulty_breakup[q.difficulty]["correct"]=0
+          difficulty_breakup[q.difficulty]["incorrect"]=0
+          difficulty_breakup[q.difficulty]["unattempted"]=0
+        else
+          difficulty_breakup[q.difficulty]["total"]+=1
+        end
+        puts question_answers[q.id.to_s]['attempt']
+        difficulty_breakup[q.difficulty]["correct"]+=1 if question_answers[q.id.to_s]['attempt'].to_i ==3
+        difficulty_breakup[q.difficulty]["incorrect"]+=1 if question_answers[q.id.to_s]['attempt'].to_i ==2
+        difficulty_breakup[q.difficulty]["unattempted"]+=1 if question_answers[q.id.to_s]['attempt'].to_i < 2
+        
+      end
+
+      question_analysis[q.id]||={}
+      question_analysis[q.id]["index"]=question_answers[q.id.to_s]['index'].to_i+1
+      question_analysis[q.id]["chapter"]=q.chapter.name
+      question_analysis[q.id]["second_topic"]=q.second_topic.name
+      question_analysis[q.id]["attempt"]=question_answers[q.id.to_s]['attempt'].to_i
+      question_analysis[q.id]["difficulty"]=q.difficulty if q.difficulty
 
       puts "topic Score"+second_topic_score.to_s
       puts question_answers[q.id.to_s]['score'].to_i
       if !second_topic_score.has_key?(q.second_topic_id)
         second_topic_score[q.second_topic_id] ={}
-        second_topic_score[q.second_topic_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
+        second_topic_score[q.second_topic_id]["name"] = q.second_topic.name
+        second_topic_score[q.second_topic_id]["total_time_spent"]= question_answers[q.id.to_s]['time_taken'].to_f
         second_topic_score[q.second_topic_id]["question_count"] = 1
+        second_topic_score[q.second_topic_id]["correct_count"] = 0
+        second_topic_score[q.second_topic_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
       else
         second_topic_score[q.second_topic_id]["total_score"] += question_answers[q.id.to_s]['score'].to_i
+        second_topic_score[q.second_topic_id]["total_time_spent"]+= question_answers[q.id.to_s]['time_taken'].to_f
         second_topic_score[q.second_topic_id]["question_count"] += 1
       end
-
+      second_topic_score[q.second_topic_id]["correct_count"] +=1 if question_answers[q.id.to_s]['attempt'].to_i ==3
 
       puts "chapter Score"+chapter_score.to_s
       puts question_answers[q.id.to_s]['score'].to_i
       if !chapter_score.has_key?(q.chapter_id)
         chapter_score[q.chapter_id] ={}
-        chapter_score[q.chapter_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
-        chapter_score[q.chapter_id]["question_count"] = 1
         chapter_score[q.chapter_id]["name"] = q.chapter.name
+        chapter_score[q.chapter_id]["total_time_spent"]= question_answers[q.id.to_s]['time_taken'].to_f
+        chapter_score[q.chapter_id]["question_count"] = 1
+        chapter_score[q.chapter_id]["correct_count"] =0
+        chapter_score[q.chapter_id]["total_score"] = question_answers[q.id.to_s]['score'].to_i
       else
         chapter_score[q.chapter_id]["total_score"] += question_answers[q.id.to_s]['score'].to_i
+        chapter_score[q.chapter_id]["total_time_spent"]+= question_answers[q.id.to_s]['time_taken'].to_f
         chapter_score[q.chapter_id]["question_count"] += 1
-        chapter_score[q.chapter_id]["name"] = q.chapter.name
       end
-
+      chapter_score[q.chapter_id]["correct_count"] +=1 if question_answers[q.id.to_s]['attempt'].to_i ==3
       
       if question_answers[q.id.to_s]['score'] == "0"
         new_lowest_position = q.second_topic.stream_position
@@ -125,12 +168,14 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     second_topic_score.each do |second_topic,value|
       average_score = value["total_score"].to_f/value["question_count"]
       value["average_score"] = average_score
+      value["average_time_spent"] = value["total_time_spent"].to_f/value["question_count"]
       UserEntityScore.create!(:user => user, :entity_type => 'SecondTopic', :high_score =>average_score.to_i,:entity_id =>second_topic,
         :test_type => 'Diagnostic', :test_id => attempt.id)
     end
     chapter_score.each do |chapter,value|
       average_score = value["total_score"].to_f/value["question_count"]
       value["average_score"] = average_score
+      value["average_time_spent"] = value["total_time_spent"].to_f/value["question_count"]
       UserEntityScore.create!(:user => user, :entity_type => 'Chapter', :high_score =>average_score.to_i,:entity_id =>chapter,
         :test_type => 'Diagnostic', :test_id => attempt.id)
     end
@@ -146,7 +191,10 @@ class DiagnosticTestAttempt < ActiveRecord::Base
     response_hash["result"]["chapters"]=chapter_score
     response_hash["result"]["second_topics"]||={}
     response_hash["result"]["second_topics"]=second_topic_score
-
+    response_hash["difficulty_breakup"]||={}
+    response_hash["difficulty_breakup"]=difficulty_breakup
+    response_hash["question_analysis"]||={}
+    response_hash["question_analysis"]=question_analysis
     response_hash["weak_entity"]||={}
     response_hash["weak_entity"] = get_weak_entity(attempt)
     response_hash["personalized_test_remaining"] = personalized_test_remaining
@@ -220,10 +268,14 @@ class DiagnosticTestAttempt < ActiveRecord::Base
                 
                 while question_count > 0 
                   question_id = question_ids[rand(question_ids.count)]
-                  DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => question_id,
-                   :diagnostic_test_id => test.id)
-                  question_ids.delete(question_id)
-                  question_count = question_count -1
+                  puts "Answer count"
+                  puts ShortChoiceAnswer.where(:short_choice_question_id => question_id).count
+                  if (ShortChoiceAnswer.where(:short_choice_question_id => question_id).count >0)
+                    DiagnosticTestQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => question_id,
+                     :diagnostic_test_id => test.id)
+                    question_ids.delete(question_id)
+                    question_count = question_count -1
+                  end
                 end
 
               end
