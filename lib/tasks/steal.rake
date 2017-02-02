@@ -9,10 +9,16 @@ namespace :steal do
 
     chapters = [ 'surface-areas-and-volumes']
 
+    chapters = ['force-and-pressure',
+'friction',
+'sound',
+'some-natural-phenomena',
+'light',
+'stars-and-the-solar-system']
 
     # chapters = []
 
-    cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
+    cookie = "km_ai=7rngi0F6cn5SyVLY8ktfjFYHPGg%3D; km_lv=x; intercom-id-sh7i09tg=c28e212d-69a0-4a35-9795-5104cd5b5b37; admin_sessionid=9b3cb0be6ce7bed9fc5918d1fe5f1ad1; ajs_anonymous_id=%22adb5564d-995f-435c-a9d6-e88bcfe5c8b6%22; ajs_group_id=null; ajs_user_id=%221608938%22; _ga=GA1.2.305201149.1485966755; kvcd=1486020147304; km_vs=1; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20170203%3A3%7CJGDAMDUE4BESXMWLB6LVSD%3A20170203%3A3%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20170203%3A3; csrftoken=EJpjbHVANVlv7KHXWVfJaYi1ecVwxo2M; _gat=1; AWSALB=ACfc+GFGMDt3fvc2Wk6KhFaItANiVWmag30NAisFppOl6XoZgO2tfpAYZ6LUgupwtEF10fvPMdl5ovrZ+JKAB24z/LVkwBmiv85mxJXadDcpbWCCaO9+4JKAXG++"
 
 
     chapters.each do |chap_name|  
@@ -49,8 +55,8 @@ namespace :steal do
 end
 
 def create_topics(chapter)
-  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
-  url = "https://www.toppr.com/api/v4/class-10/maths/#{chapter.name}/question-bank/?format=json"
+  cookie = "km_ai=7rngi0F6cn5SyVLY8ktfjFYHPGg%3D; km_lv=x; intercom-id-sh7i09tg=c28e212d-69a0-4a35-9795-5104cd5b5b37; admin_sessionid=9b3cb0be6ce7bed9fc5918d1fe5f1ad1; ajs_anonymous_id=%22adb5564d-995f-435c-a9d6-e88bcfe5c8b6%22; ajs_group_id=null; ajs_user_id=%221608938%22; _ga=GA1.2.305201149.1485966755; kvcd=1486020147304; km_vs=1; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20170203%3A3%7CJGDAMDUE4BESXMWLB6LVSD%3A20170203%3A3%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20170203%3A3; csrftoken=EJpjbHVANVlv7KHXWVfJaYi1ecVwxo2M; _gat=1; AWSALB=ACfc+GFGMDt3fvc2Wk6KhFaItANiVWmag30NAisFppOl6XoZgO2tfpAYZ6LUgupwtEF10fvPMdl5ovrZ+JKAB24z/LVkwBmiv85mxJXadDcpbWCCaO9+4JKAXG++"
+  url = "https://www.toppr.com/api/v4/class-8/physics/#{chapter.name}/question-bank/?format=json"
   data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
   puts data["goals"]
   data["goals"].each do |goal|
@@ -67,8 +73,8 @@ def create_topics(chapter)
 end
 
 def get_number_of_pages(chap_name, difficulty, topic)
-  cookie = "csrftoken=lZKGxtJzec9uIJ3jx0McYWRewnV7Gqo0; _ga=GA1.2.949189307.1476968295; _fp73=ebdd7ad2-8b89-6c94-b899-d369c2ef82b5; ajs_user_id=%221438081%22; ajs_group_id=null; ajs_anonymous_id=%2212caf5a3-3fcb-4812-a5eb-1f9bf6be2477%22; intercom-id-sh7i09tg=054dde12-06c0-4035-a1a4-71e0c6b8315d; __ar_v4=STGREAUEC5CBTFLT6ZAOHQ%3A20161019%3A22%7CJGDAMDUE4BESXMWLB6LVSD%3A20161019%3A22%7CVPEPR7JRURDPXMDFMMUNWO%3A20161019%3A22; AWSALB=LJWYYcqMcyDvXETOKMw4S3vACeGG+cAREh0I+v/vZlAmEA+WKkqO+IRsKlkeut+ZL+e8J10fp/LiD3x5+dhTc48dmEG5hhV/imJNls/ynDLOPUdl/e86cqYJYVN0; admin_sessionid=3acff83a20dbaca98ef7a4fdaf5a9d56; _fs73=8538b0d1-6c88-dd3f-f4f2-740a9532fb1f"
-  url = "https://www.toppr.com/api/v4/class-10/maths/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  cookie = "km_ai=7rngi0F6cn5SyVLY8ktfjFYHPGg%3D; km_lv=x; intercom-id-sh7i09tg=c28e212d-69a0-4a35-9795-5104cd5b5b37; admin_sessionid=9b3cb0be6ce7bed9fc5918d1fe5f1ad1; ajs_anonymous_id=%22adb5564d-995f-435c-a9d6-e88bcfe5c8b6%22; ajs_group_id=null; ajs_user_id=%221608938%22; _ga=GA1.2.305201149.1485966755; kvcd=1486020147304; km_vs=1; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20170203%3A3%7CJGDAMDUE4BESXMWLB6LVSD%3A20170203%3A3%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20170203%3A3; csrftoken=EJpjbHVANVlv7KHXWVfJaYi1ecVwxo2M; _gat=1; AWSALB=ACfc+GFGMDt3fvc2Wk6KhFaItANiVWmag30NAisFppOl6XoZgO2tfpAYZ6LUgupwtEF10fvPMdl5ovrZ+JKAB24z/LVkwBmiv85mxJXadDcpbWCCaO9+4JKAXG++"
+  url = "https://www.toppr.com/api/v4/class-8/physics/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
   begin
     data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
   rescue Exception => e  
@@ -81,7 +87,7 @@ end
 
 
 def get_url chap_name, page, difficulty, topic
-  "https://www.toppr.com/api/v4/class-10/maths/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  "https://www.toppr.com/api/v4/class-8/physics/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
 end
 
 def save_data(data, chapter, difficulty, topic)
@@ -133,8 +139,8 @@ def save_data(data, chapter, difficulty, topic)
 end
 
 def subject_id
-  4
+  6
 end
 def standard_id
-  4
+  1
 end
