@@ -9,12 +9,11 @@ namespace :steal do
 
     chapters = [ 'surface-areas-and-volumes']
 
-    chapters = ['force-and-pressure',
-'friction',
-'sound',
-'some-natural-phenomena',
-'light',
-'stars-and-the-solar-system']
+    chapters = ['motion',
+'force-and-laws-of-motion',
+'gravitation',
+'work-and-energy',
+'sound']
 
     # chapters = []
 
@@ -56,7 +55,7 @@ end
 
 def create_topics(chapter)
   cookie = "km_ai=7rngi0F6cn5SyVLY8ktfjFYHPGg%3D; km_lv=x; intercom-id-sh7i09tg=c28e212d-69a0-4a35-9795-5104cd5b5b37; admin_sessionid=9b3cb0be6ce7bed9fc5918d1fe5f1ad1; ajs_anonymous_id=%22adb5564d-995f-435c-a9d6-e88bcfe5c8b6%22; ajs_group_id=null; ajs_user_id=%221608938%22; _ga=GA1.2.305201149.1485966755; kvcd=1486020147304; km_vs=1; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20170203%3A3%7CJGDAMDUE4BESXMWLB6LVSD%3A20170203%3A3%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20170203%3A3; csrftoken=EJpjbHVANVlv7KHXWVfJaYi1ecVwxo2M; _gat=1; AWSALB=ACfc+GFGMDt3fvc2Wk6KhFaItANiVWmag30NAisFppOl6XoZgO2tfpAYZ6LUgupwtEF10fvPMdl5ovrZ+JKAB24z/LVkwBmiv85mxJXadDcpbWCCaO9+4JKAXG++"
-  url = "https://www.toppr.com/api/v4/class-8/physics/#{chapter.name}/question-bank/?format=json"
+  url = "https://www.toppr.com/api/v4/class-9/physics/#{chapter.name}/question-bank/?format=json"
   data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
   puts data["goals"]
   data["goals"].each do |goal|
@@ -74,7 +73,7 @@ end
 
 def get_number_of_pages(chap_name, difficulty, topic)
   cookie = "km_ai=7rngi0F6cn5SyVLY8ktfjFYHPGg%3D; km_lv=x; intercom-id-sh7i09tg=c28e212d-69a0-4a35-9795-5104cd5b5b37; admin_sessionid=9b3cb0be6ce7bed9fc5918d1fe5f1ad1; ajs_anonymous_id=%22adb5564d-995f-435c-a9d6-e88bcfe5c8b6%22; ajs_group_id=null; ajs_user_id=%221608938%22; _ga=GA1.2.305201149.1485966755; kvcd=1486020147304; km_vs=1; __ar_v4=VPEPR7JRURDPXMDFMMUNWO%3A20170203%3A3%7CJGDAMDUE4BESXMWLB6LVSD%3A20170203%3A3%7CSTGREAUEC5CBTFLT6ZAOHQ%3A20170203%3A3; csrftoken=EJpjbHVANVlv7KHXWVfJaYi1ecVwxo2M; _gat=1; AWSALB=ACfc+GFGMDt3fvc2Wk6KhFaItANiVWmag30NAisFppOl6XoZgO2tfpAYZ6LUgupwtEF10fvPMdl5ovrZ+JKAB24z/LVkwBmiv85mxJXadDcpbWCCaO9+4JKAXG++"
-  url = "https://www.toppr.com/api/v4/class-8/physics/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  url = "https://www.toppr.com/api/v4/class-9/physics/#{chap_name}/question-bank/?format=json'&'page=1'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
   begin
     data = JSON.parse(`curl -v --cookie "#{cookie}" #{url}`)
   rescue Exception => e  
@@ -87,7 +86,7 @@ end
 
 
 def get_url chap_name, page, difficulty, topic
-  "https://www.toppr.com/api/v4/class-8/physics/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
+  "https://www.toppr.com/api/v4/class-9/physics/#{chap_name}/question-bank/?format=json'&'page=#{page}'&'difficulty=#{difficulty}'&'goal=#{topic.goal_tid}"
 end
 
 def save_data(data, chapter, difficulty, topic)
@@ -139,8 +138,8 @@ def save_data(data, chapter, difficulty, topic)
 end
 
 def subject_id
-  6
+  9
 end
 def standard_id
-  1
+  2
 end

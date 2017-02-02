@@ -14,9 +14,12 @@ Rails.application.routes.draw do
   resources :chapters do 
     get :get_topics_list
   end
-  resources :subjects
-  resources :standards do 
+  resources :subjects do
     get :get_chapters_list
+  end
+
+  resources :standards do 
+    get :get_subjects_list
   end
 
   get "/" => "home#index"

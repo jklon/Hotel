@@ -2,6 +2,8 @@
   .field
     = f.label :standard
     = f.select :with_standard_id, @filterrific.select_options[:with_standard_id], {include_blank: '- Any -'}
+    = f.label :subject
+    = f.select :with_subject_id, @filterrific.select_options[:with_subject_id], {include_blank: '- Any -'}
     = f.label :chapter
     = f.select :with_chapter_id, @filterrific.select_options[:with_chapter_id], { include_blank: '- Any -' }
   .field

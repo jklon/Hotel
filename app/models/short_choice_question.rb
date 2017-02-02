@@ -67,11 +67,19 @@ class ShortChoiceQuestion < ActiveRecord::Base
     Standard.all.pluck(:name, :id)
   end
 
-  def self.options_for_chapters standard_id
-    if !standard_id
+  def self.options_for_chapters subject_id
+    if !subject_id
       Chapter.all.pluck(:name, :id)
     else
-      Chapter.where(:standard_id => standard_id).pluck(:name, :id)
+      Chapter.where(:subject_id => subject_id).pluck(:name, :id)
+    end
+  end
+
+  def self.options_for_subjects standard_id
+    if !standard_id
+      Subject.all.pluck(:name, :id)
+    else
+      Subject.where(:standard_id => standard_id).pluck(:name, :id)
     end
   end
 

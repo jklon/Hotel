@@ -1,4 +1,5 @@
 class SubjectsController < ApplicationController
+  before_action :find_subject, only: [:get_chapters_list]
   def index
     @subjects = Subject.all
   end
@@ -25,8 +26,21 @@ class SubjectsController < ApplicationController
   def show
   end
 
+  def get_chapters_list
+    @chapters = @subject.chapters
+    respond_to do |format|
+      format.json {render json: @chapters.pluck(:name, :id).to_json, status: 200}
+      format.html
+    end
+  end
+
   private
   def subject_params
     params.require(:subject).permit(:name, :description, :full_name, :standard_id, :code)
+  end
+
+  def find_subject
+    @subject = Subject.find_by_id(params[:subject_id])
+    render nothing: true, status: :not_found unless @subject.present? 
   end
 end

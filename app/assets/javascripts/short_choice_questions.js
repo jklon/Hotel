@@ -27,6 +27,26 @@ function fill_topic_options (options){
   }
 }
 
+function fill_chapter_options (options) {
+  var element = $("#filterrific_with_chapter_id").html("<option value>- Any -</option>");
+  for (var i=0; i<options.length; i++){
+    $('<option/>' ,{
+      'value' : options[i][1],
+      'html'  : options[i][0],
+    }).appendTo($(element))
+  }
+}
+
+function fill_subject_options (options) {
+  var element = $("#filterrific_with_subject_id").html("<option value>- Any -</option>");
+  for (var i=0; i<options.length; i++){
+    $('<option/>' ,{
+      'value' : options[i][1],
+      'html'  : options[i][0],
+    }).appendTo($(element))
+  }
+}
+
 function get_chapter_topics (chapter_id) {
   $.ajax({
     url: '/chapters/'+chapter_id+'/get_topics_list.json',
@@ -39,19 +59,9 @@ function get_chapter_topics (chapter_id) {
   });
 }
 
-function fill_chapter_options (options) {
-  var element = $("#filterrific_with_chapter_id").html("<option value>- Any -</option>");
-  for (var i=0; i<options.length; i++){
-    $('<option/>' ,{
-      'value' : options[i][1],
-      'html'  : options[i][0],
-    }).appendTo($(element))
-  }
-}
-
-function get_standard_chapters (standard_id) {
+function get_subject_chapters (subject_id) {
   $.ajax({
-    url: '/standards/'+standard_id+'/get_chapters_list.json',
+    url: '/subjects/'+subject_id+'/get_chapters_list.json',
     type: 'GET',
     dataType: 'json',
     success: function(data){
@@ -60,13 +70,28 @@ function get_standard_chapters (standard_id) {
   });
 }
 
+function get_standard_subjects (standard_id) {
+  $.ajax({
+    url: '/standards/'+standard_id+'/get_subjects_list.json',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data){
+      fill_subject_options(data)
+    }
+  });
+}
+
 function add_option_listeners (){
 
   $('#filterrific_with_standard_id').on('change', function(){
-    get_standard_chapters($(this).val())
+    get_standard_subjects($(this).val())
   });
 
   $('#filterrific_with_chapter_id').on('change', function(){
     get_chapter_topics($(this).val())
+  });
+
+  $('#filterrific_with_subject_id').on('change', function(){
+    get_subject_chapters($(this).val())
   });
 }

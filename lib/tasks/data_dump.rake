@@ -28,7 +28,7 @@ namespace :data_dump do
     columns = ["id", "question_text", "answer_description", "Chapter Name","Topic Name", "level",  "difficulty",
       "answer 1", "answer 2", "answer 3", "answer 4", "answer 5"]
     columns.each_with_index{|v,i| sheet.add_cell(0,i,v)}
-    ShortChoiceQuestion.where(:standard_id => 1).includes(:chapter, :topic, :short_choice_answers).find_each.with_index do |q, i|
+    ShortChoiceQuestion.where(:standard_id => 1, :subject_id => 6).includes(:chapter, :topic, :short_choice_answers).find_each.with_index do |q, i|
       sheet.add_cell(i+1, 0, q.id)
       sheet.add_cell(i+1, 1, q.question_text)
       sheet.add_cell(i+1, 2, q.answer)
@@ -40,7 +40,7 @@ namespace :data_dump do
         sheet.add_cell(i+1, 6+j+1, a.answer_text)
       end
     end
-    workbook.write("/Users/neeraj/Documents/class-8-questions.xlsx")
+    workbook.write("/Users/neeraj/Documents/class-8-physics-questions.xlsx")
   end
 
   task :excel_10 => :environment do 
