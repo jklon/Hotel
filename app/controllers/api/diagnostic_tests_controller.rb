@@ -52,7 +52,6 @@ class Api::DiagnosticTestsController < ApiController
       if personalized>0
         response["standards"]||={}
         response["standards"]["standard_id"]= general_test_attempt.diagnostic_test.standard.id
-        response["standards"]["subject_id"] = general_test_attempt.diagnostic_test.standard.id
         response["standards"]["standard_number"] = general_test_attempt.diagnostic_test.standard.standard_number
         response["standards"]["name"] = general_test_attempt.diagnostic_test.standard.name
         response["personalized"]["comment"] = "Hi, "+@user.first_name+", We have got a special test based on the result of your last test at "+general_test_attempt.created_at.to_s
@@ -60,7 +59,7 @@ class Api::DiagnosticTestsController < ApiController
     end
     
     if personalized == 0
-      response = get_general_tests(response)
+      response = get_general_tests_with_subjects(response)
     end
     response["attempted"]["flag"] = attempted
     response["personalized"]["count"] = personalized
@@ -110,6 +109,30 @@ class Api::DiagnosticTestsController < ApiController
         end
       end
       response["standards"]<< payload
+    end
+    return response
+  end
+  def get_general_tests_with_subjects(response)
+    response["standards"]||={}
+    Standard.includes(:subjects).where(:standard_number => [6,7,8,9]).each do |standard|
+      response["standards"][standard.id]||={}
+      response["standards"][standard.id]["name"]=standard.name
+      response["standards"][standard.id]["number"]=standard.standard_number
+      response["standards"][standard.id]["subjects"]||={}
+      DiagnosticTest.where(:personalization_type => 0,:standard_id => standard.id,:entity_type => "Stream").each do |test|
+        subject= Subject.where(:id => test.subject_id).first
+        if subject
+          response["standards"][standard.id]["subjects"][subject.id]||={}
+          response["standards"][standard.id]["subjects"][subject.id]["name"]=subject.name
+          response["standards"][standard.id]["subjects"][subject.id]["streams"]||={}
+          stream = Stream.where(:id => test.entity_id).first
+          if stream
+            response["standards"][standard.id]["subjects"][subject.id]["streams"][stream.id]||={}
+            response["standards"][standard.id]["subjects"][subject.id]["streams"][stream.id]["name"]=stream.name
+          end
+        end
+      end
+
     end
     return response
   end
