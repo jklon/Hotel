@@ -118,17 +118,20 @@ class Api::DiagnosticTestsController < ApiController
       response["standards"][standard.id]||={}
       response["standards"][standard.id]["name"]=standard.name
       response["standards"][standard.id]["number"]=standard.standard_number
+      response["standards"][standard.id]["standard_id"]=standard.id
       response["standards"][standard.id]["subjects"]||={}
       DiagnosticTest.where(:personalization_type => 0,:standard_id => standard.id,:entity_type => "Stream").each do |test|
         subject= Subject.where(:id => test.subject_id).first
         if subject
           response["standards"][standard.id]["subjects"][subject.id]||={}
           response["standards"][standard.id]["subjects"][subject.id]["name"]=subject.name
+          response["standards"][standard.id]["subjects"][subject.id]["subject_id"]=subject.id
           response["standards"][standard.id]["subjects"][subject.id]["streams"]||={}
           stream = Stream.where(:id => test.entity_id).first
           if stream
             response["standards"][standard.id]["subjects"][subject.id]["streams"][stream.id]||={}
             response["standards"][standard.id]["subjects"][subject.id]["streams"][stream.id]["name"]=stream.name
+            response["standards"][standard.id]["subjects"][subject.id]["streams"][stream.id]["stream_id"]=stream.id
           end
         end
       end
