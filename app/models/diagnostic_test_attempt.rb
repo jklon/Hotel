@@ -258,7 +258,7 @@ class DiagnosticTestAttempt < ActiveRecord::Base
               personalized += 1
               personalized_test = DiagnosticTestPersonalization.create(:user=> user,:attempted => false)
               test = DiagnosticTest.create(:standard_id => attempt.diagnostic_test.standard_id, 
-                :subject_id => attempt.diagnostic_test.standard_id, :name=> "Random_Question", :test_type => "Topicwise", 
+                :subject_id => attempt.diagnostic_test.subject_id, :name=> "Random_Question", :test_type => "Topicwise", 
                 :diagnostic_test_personalization => personalized_test, :personalization_type => 1,:entity_type =>"Chapter",
                 :entity_id => key )
               
