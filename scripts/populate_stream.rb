@@ -8,3 +8,10 @@ SecondTopic.all.each do |topic|
   topic.stream_id = stream.id
   topic.save!
 end
+
+ShortChoiceQuestion.where(:subject_id => [6,7,8]).each do |question|
+	topic = SecondTopic.where(:id=>question.second_topic_id).first
+	puts topic.name
+	question.stream_id = topic.stream_id
+	question.save!
+end
