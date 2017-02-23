@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117185055) do
+ActiveRecord::Schema.define(version: 20170223100205) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -162,6 +162,16 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "second_topic_trees", force: :cascade do |t|
+    t.integer  "parent_id",  limit: 4
+    t.integer  "child_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "second_topic_trees", ["child_id"], name: "index_second_topic_trees_on_child_id", using: :btree
+  add_index "second_topic_trees", ["parent_id"], name: "index_second_topic_trees_on_parent_id", using: :btree
 
   create_table "second_topics", force: :cascade do |t|
     t.integer  "chapter_id",  limit: 4
