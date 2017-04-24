@@ -2,20 +2,20 @@
 
 rails generate model QuestionStyle  name:string alias:string 
 
-rails generate migration add_alias_to_second_topics alias:string
+rails generate migration add_alias_to_second_topics alias:string sequence:integer
 add_column :second_topics, :alias, :string
 add_column :second_topics, :sequence, :integer
 
-rails generate migration add_alias_to_chapters alias:string
+rails generate migration add_alias_sequence_to_chapters alias:string sequence:integer
 add_column :chapters, :alias, :string
-add_column :second_topics, :sequence, :integer
+add_column :chapters, :sequence, :integer
 
 rails generate migration add_alias_to_streams alias:string
 add_column :streams, :alias, :string
 
-rails generate migration add_alias_to_sub_topics alias:string
+rails generate migration add_alias_sequence_to_sub_topics alias:string sequence:integer
 add_column :sub_topics, :alias, :string
-add_column :second_topics, :sequence, :integer
+add_column :sub_topics, :sequence, :integer
 
 rails generate migration add_second_topic_to_sub_topic second_topic:references
 add_reference :sub_topics, :second_topic
@@ -23,7 +23,7 @@ add_reference :sub_topics, :second_topic
 rails generate migration add_question_style_to_short_choice_questions question_style:references
 add_reference :short_choice_questions, :question_style
 
-rails generate migration add_question_style_to_worksheet question_style:references
+rails generate migration add_question_style_sequence_entity_sub_topic_to_worksheet question_style:references
 add_reference :worksheets, :question_style
 add_column :worksheets, :sequence, :integer
 add_reference :worksheets, :sub_topic
@@ -34,7 +34,7 @@ rails generate migration remove_entity_references_to_user_worksheet_attempt
 remove_references :user_worksheet_attempts, :second_topic
 remove_references :user_worksheet_attempts, :topic
 
-rails generate model create_user_worksheet_attempt_scqs short_choice_question:references user_worksheet_attempt:references 
+rails generate model user_worksheet_attempt_scq short_choice_question:references user_worksheet_attempt:references 
 def change
     create_table :user_worksheet_attempt_scqs do |t|
       t.integer :user_worksheet_attempt_id
@@ -49,7 +49,7 @@ def change
     add_index :user_worksheet_attempt_scqs, :short_choice_question_id
   end
 
-rails generate model create_user_worksheet_attempt_scq_scas short_choice_answer:references user_worksheet_attempt_scq:references 
+rails generate model user_worksheet_attempt_scq_sca short_choice_answer:references user_worksheet_attempt_scq:references 
   def change
     create_table :user_worksheet_attempt_scq_scas do |t|
       t.integer :user_worksheet_attempt_scq_id

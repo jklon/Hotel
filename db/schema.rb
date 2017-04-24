@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117185055) do
+ActiveRecord::Schema.define(version: 20170424182059) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.datetime "updated_at",                 null: false
     t.string   "code",           limit: 255
     t.integer  "stream_id",      limit: 4
+    t.string   "alias",          limit: 255
+    t.integer  "sequence",       limit: 4
   end
 
   add_index "chapters", ["code"], name: "index_chapters_on_code", unique: true, using: :btree
@@ -163,6 +165,23 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "question_styles", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "alias",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "second_topic_trees", force: :cascade do |t|
+    t.integer  "parent_id",  limit: 4
+    t.integer  "child_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "second_topic_trees", ["child_id"], name: "index_second_topic_trees_on_child_id", using: :btree
+  add_index "second_topic_trees", ["parent_id"], name: "index_second_topic_trees_on_parent_id", using: :btree
+
   create_table "second_topics", force: :cascade do |t|
     t.integer  "chapter_id",  limit: 4
     t.integer  "subject_id",  limit: 4
@@ -171,6 +190,8 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.integer  "stream_id",   limit: 4
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "alias",       limit: 255
+    t.integer  "sequence",    limit: 4
   end
 
   add_index "second_topics", ["chapter_id"], name: "index_second_topics_on_chapter_id", using: :btree
@@ -231,11 +252,13 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.integer  "second_topic_id",            limit: 4
     t.text     "question_text_old",          limit: 65535
     t.integer  "source_id",                  limit: 4
+    t.integer  "question_style_id",          limit: 4
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
   add_index "short_choice_questions", ["difficulty"], name: "index_short_choice_questions_on_difficulty", using: :btree
   add_index "short_choice_questions", ["level"], name: "index_short_choice_questions_on_level", using: :btree
+  add_index "short_choice_questions", ["question_style_id"], name: "index_short_choice_questions_on_question_style_id", using: :btree
   add_index "short_choice_questions", ["second_topic_id"], name: "index_short_choice_questions_on_second_topic_id", using: :btree
   add_index "short_choice_questions", ["standard_id"], name: "index_short_choice_questions_on_standard_id", using: :btree
   add_index "short_choice_questions", ["stream_id"], name: "index_short_choice_questions_on_stream_id", using: :btree
@@ -259,6 +282,7 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "alias",      limit: 255
   end
 
   create_table "student_phone_numbers", force: :cascade do |t|
@@ -288,9 +312,13 @@ ActiveRecord::Schema.define(version: 20170117185055) do
     t.datetime "updated_at",                  null: false
     t.string   "code",            limit: 255
     t.integer  "stream_id",       limit: 4
+    t.string   "alias",           limit: 255
+    t.integer  "sequence",        limit: 4
+    t.integer  "second_topic_id", limit: 4
   end
 
   add_index "sub_topics", ["code"], name: "index_sub_topics_on_code", unique: true, using: :btree
+  add_index "sub_topics", ["second_topic_id"], name: "index_sub_topics_on_second_topic_id", using: :btree
   add_index "sub_topics", ["stream_id"], name: "index_sub_topics_on_stream_id", using: :btree
 
   create_table "subjects", force: :cascade do |t|
@@ -360,6 +388,30 @@ ActiveRecord::Schema.define(version: 20170117185055) do
 
   add_index "user_phone_numbers", ["number"], name: "index_user_phone_numbers_on_number", using: :btree
   add_index "user_phone_numbers", ["user_id"], name: "index_user_phone_numbers_on_user_id", using: :btree
+
+  create_table "user_worksheet_attempt_scq_scas", force: :cascade do |t|
+    t.integer  "short_choice_answer_id",        limit: 4
+    t.integer  "user_worksheet_attempt_scq_id", limit: 4
+    t.float    "time_spent",                    limit: 24
+    t.integer  "attempt_order",                 limit: 4
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "user_worksheet_attempt_scq_scas", ["short_choice_answer_id"], name: "index_user_ws_attempt_scq_sca_sca_id", using: :btree
+  add_index "user_worksheet_attempt_scq_scas", ["user_worksheet_attempt_scq_id"], name: "index_user_ws_attempt_scq_sca_ws_attempt_id", using: :btree
+
+  create_table "user_worksheet_attempt_scqs", force: :cascade do |t|
+    t.integer  "short_choice_question_id",  limit: 4
+    t.integer  "user_worksheet_attempt_id", limit: 4
+    t.float    "time_spent",                limit: 24
+    t.integer  "attempt",                   limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "user_worksheet_attempt_scqs", ["short_choice_question_id"], name: "index_user_ws_attempt_scq_scq_id", using: :btree
+  add_index "user_worksheet_attempt_scqs", ["user_worksheet_attempt_id"], name: "index_user_ws_attempt_scq_ws_attempt_id", using: :btree
 
   create_table "user_worksheet_attempts", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
@@ -432,27 +484,42 @@ ActiveRecord::Schema.define(version: 20170117185055) do
   add_index "worksheet_scqs", ["worksheet_id"], name: "index_worksheet_scqs_on_worksheet_id", using: :btree
 
   create_table "worksheets", force: :cascade do |t|
-    t.integer  "topic_id",        limit: 4
-    t.integer  "second_topic_id", limit: 4
+    t.integer  "topic_id",          limit: 4
+    t.integer  "second_topic_id",   limit: 4
     t.boolean  "active"
-    t.integer  "difficulty",      limit: 4
-    t.integer  "chapter_id",      limit: 4
-    t.integer  "stream_id",       limit: 4
-    t.integer  "standard_id",     limit: 4
-    t.integer  "subject_id",      limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "difficulty",        limit: 4
+    t.integer  "chapter_id",        limit: 4
+    t.integer  "stream_id",         limit: 4
+    t.integer  "standard_id",       limit: 4
+    t.integer  "subject_id",        limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "question_style_id", limit: 4
+    t.integer  "sequence",          limit: 4
+    t.integer  "sub_topic_id",      limit: 4
+    t.integer  "entity_id",         limit: 4
+    t.string   "entity_type",       limit: 255
   end
 
   add_index "worksheets", ["active"], name: "index_worksheets_on_active", using: :btree
   add_index "worksheets", ["chapter_id"], name: "index_worksheets_on_chapter_id", using: :btree
   add_index "worksheets", ["difficulty"], name: "index_worksheets_on_difficulty", using: :btree
+  add_index "worksheets", ["question_style_id"], name: "index_worksheets_on_question_style_id", using: :btree
   add_index "worksheets", ["second_topic_id"], name: "index_worksheets_on_second_topic_id", using: :btree
   add_index "worksheets", ["standard_id"], name: "index_worksheets_on_standard_id", using: :btree
   add_index "worksheets", ["stream_id"], name: "index_worksheets_on_stream_id", using: :btree
+  add_index "worksheets", ["sub_topic_id"], name: "index_worksheets_on_sub_topic_id", using: :btree
   add_index "worksheets", ["subject_id"], name: "index_worksheets_on_subject_id", using: :btree
   add_index "worksheets", ["topic_id"], name: "index_worksheets_on_topic_id", using: :btree
 
   add_foreign_key "diagnostic_test_personalizations", "diagnostic_tests"
   add_foreign_key "diagnostic_test_personalizations", "users"
+  add_foreign_key "short_choice_questions", "question_styles"
+  add_foreign_key "sub_topics", "second_topics"
+  add_foreign_key "user_worksheet_attempt_scq_scas", "short_choice_answers"
+  add_foreign_key "user_worksheet_attempt_scq_scas", "user_worksheet_attempt_scqs"
+  add_foreign_key "user_worksheet_attempt_scqs", "short_choice_questions"
+  add_foreign_key "user_worksheet_attempt_scqs", "user_worksheet_attempts"
+  add_foreign_key "worksheets", "question_styles"
+  add_foreign_key "worksheets", "sub_topics"
 end
