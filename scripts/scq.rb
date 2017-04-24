@@ -1,35 +1,40 @@
 require 'rubyXL'
 
-book = RubyXL::Parser.parse('/home/ec2-user/questions.xlsx')
+book = RubyXL::Parser.parse('scripts/game_examples.xlsx')
 scq_sheet = book[0]
 
-standard    = Standard.find_by(:standard_number => 6)
-subject     = Subject.where(:standard => standard, :name => "Maths").first
-stream      =  Stream.first
+
 empty_row   = false
 question    = ShortChoiceQuestion.first
 
 scq_sheet.each_with_index do |row, index|
-  if empty_row
-    empty_row = false
-    next
+  next if index ==0
+  standard    = Standard.find_by(:standard_number => row.cells[0].value[2])
+  subject     = Subject.where(:standard => standard, :name => row.cells[1].value).first
+  stream      = Standard.find_by(:name => row.cells[3].value)
+  chapter     = Chapter.find_by(:name => row.cells[6].value)
+  second_topic= SecondTopic.find_by(:name => row.cells[9].value)
+  sub_topic = SubTopic.find_by(:name => row.cells[11].value)
+  if !sub_topic
+    sub_topic = SubTopic.create(:name=> row.cells[9].value, :subject => subject, :standard => standard,:stream => stream, :chapter => chapter, :second_topic => second_topic)
   end
-
-  if row[0].value
-    if row[1].value
-      row.cells.each do |a|
-        next if not a.value
-        temp = a.value.split(")", 2).count == 2 ? a.value.split(")", 2)[1].gsub(/\A\p{Space}*/, '') : a.value.gsub(/\A\p{Space}*/, '')
-        ShortChoiceAnswer.create(:short_choice_question => question,
-       :answer_text => temp)
-      end
-    else
-      temp = row[0].value.split(".", 2).count == 2 ? row[0].value.split(".", 2)[1] : row[0].value
-      question = ShortChoiceQuestion.create(:question_text => temp.gsub(/\A\p{Space}*/, ''),
-        :standard => standard, :subject => subject, :stream => stream)
-    end    
-  else 
-    stream = Stream.find_by(:name => scq_sheet[index + 1][0].value.gsub(/\A\p{Space}*/, ''))
-    empty_row = true
+  question_style = QuestionStyle.find_by(:name => row.cells[11].value)
+  if !question_style
+    question_style = QuestionStyle.create(:name=> row.cells[11].value, :alias => row.cells[12].value)
+  end
+  workbook = Workbook.find_by(:question_style => question_style, :sub_topic => sub_topic)
+  if !workbook
+    workbook = Workbook.create(:question_style=> question_style, :sub_topic => sub_topic)
+  end
+  question_text = ""
+  question.text = row.cells[13].value if row.cells[13]
+  question = ShortChoiceQuestion.create(:question_text => question_text,
+    :standard => standard, :subject => subject, :stream => stream, :second_topic => second_topic,
+    :sub_topic => sub_topic, :question_style => question_style :sequence => row.cells[12].value)
+  count = 14
+  while row.cells[count]
+    ShortChoiceAnswer.create(:short_choice_question => question,
+       :answer_text => row.cells[count+1])
+    count = count+2
   end
 end

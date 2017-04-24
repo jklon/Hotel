@@ -1,0 +1,61 @@
+
+
+rails generate model QuestionStyle  name:string alias:string 
+
+rails generate migration add_alias_to_second_topics alias:string
+add_column :second_topics, :alias, :string
+add_column :second_topics, :sequence, :integer
+
+rails generate migration add_alias_to_chapters alias:string
+add_column :chapters, :alias, :string
+add_column :second_topics, :sequence, :integer
+
+rails generate migration add_alias_to_streams alias:string
+add_column :streams, :alias, :string
+
+rails generate migration add_alias_to_sub_topics alias:string
+add_column :sub_topics, :alias, :string
+add_column :second_topics, :sequence, :integer
+
+rails generate migration add_second_topic_to_sub_topic second_topic:references
+add_reference :sub_topics, :second_topic
+
+rails generate migration add_question_style_to_short_choice_questions question_style:references
+add_reference :short_choice_questions, :question_style
+
+rails generate migration add_question_style_to_worksheet question_style:references
+add_reference :worksheets, :question_style
+add_column :worksheets, :sequence, :integer
+add_reference :worksheets, :sub_topic
+add_column :worksheets, :entity_id, :integer
+add_column :worksheets, :entity_type, :string
+
+rails generate migration remove_entity_references_to_user_worksheet_attempt
+remove_references :user_worksheet_attempts, :second_topic
+remove_references :user_worksheet_attempts, :topic
+
+rails generate model create_user_worksheet_attempt_scqs short_choice_question:references user_worksheet_attempt:references 
+def change
+    create_table :user_worksheet_attempt_scqs do |t|
+      t.integer :user_worksheet_attempt_id
+      t.integer :short_choice_question_id
+      t.float :time_spent
+      t.integer :attempt
+      t.timestamps null: false
+
+    end
+
+    add_index :user_worksheet_attempt_scqs, :user_worksheet_attempt_id
+    add_index :user_worksheet_attempt_scqs, :short_choice_question_id
+  end
+
+rails generate model create_user_worksheet_attempt_scq_scas short_choice_answer:references user_worksheet_attempt_scq:references 
+  def change
+    create_table :user_worksheet_attempt_scq_scas do |t|
+      t.integer :user_worksheet_attempt_scq_id
+      t.integer :short_choice_answer_id
+      t.float :time_spent
+      t.integer :attempt_order
+      t.timestamps null: false
+    end
+  end
