@@ -59,3 +59,9 @@ rails generate model user_worksheet_attempt_scq_sca short_choice_answer:referenc
       t.timestamps null: false
     end
   end
+
+
+rails generate migration add_correct_order_to_short_choice_answers correct_order:integer
+add_column :short_choice_questions, ,:correct_order, :integer
+
+rails generate migration add_worksheet_sequence_no_to_short_choice_questions worksheet_sequence_no:integer

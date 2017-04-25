@@ -147,3 +147,10 @@ scq_sheet.each_with_index do |row, index|
     empty_row = true
   end
 end
+
+SubTopic.all().each do |subtopic|
+  worksheet = Worksheet.where(:sub_topic => subtopic).first
+  ShortChoiceQuestion.where(:sub_topic=> subtopic).each do |scq|
+    WorksheetQuestion.create(:question_type => "ShortChoiceQuestion", :question_id => scq.id, :worksheet =>worksheet, :sequence_no=>scq.worksheet_sequence_no) if scq 
+  end
+end

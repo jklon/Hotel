@@ -25,13 +25,11 @@ class Api::WorksheetController < ApiController
   end
 
   def get_worksheet
-  	user_params_sane? params[:user]
-    @user = User.find_or_create_temp_user(params[:user])
 
     #Creating empty JSON to return for return
     result ={}
     attempt = UserWorksheetAttempt.where(:user => @user,:worksheet_id => params[:worksheet_id]).last
-    if (attempt)
+    if (false)
       #render json: result.to_json, status: 200 and return
       @worksheet = Worksheet.includes(short_choice_questions: [:short_choice_answers]).where(:id => params[:worksheet_id]).first
       @worksheet_attempt = UserWorksheetAttempt.where(:user => @user,:worksheet_id => params[:worksheet_id]).last

@@ -18,11 +18,12 @@ json.passage_header                         scq.passage_header
 json.reason                                 scq.reason
 json.hint_image                             scq.hint_image
 json.multiple_correct                       scq.multiple_correct
-json.question_style                         scq.question_style
+json.question_style                         scq.question_style.name
 json.level                                  scq.level
 json.answer                                 scq.answer
 json.difficulty                             scq.difficulty
 json.reference_solving_time                 scq.reference_solving_time
+json.worksheet_sequence_no 					scq.worksheet_sequence_no 
 json.answers do
   json.array! scq.short_choice_answers, partial: 'api/short_choice_answers/show', as: :sca
 end

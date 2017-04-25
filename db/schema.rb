@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424182059) do
+ActiveRecord::Schema.define(version: 20170425061238) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(version: 20170424182059) do
     t.string   "label",                    limit: 255
     t.string   "image",                    limit: 255
     t.text     "answer_text_old",          limit: 65535
+    t.integer  "correct_order",            limit: 4
   end
 
   add_index "short_choice_answers", ["short_choice_question_id"], name: "index_short_choice_answers_on_short_choice_question_id", using: :btree
@@ -253,6 +254,7 @@ ActiveRecord::Schema.define(version: 20170424182059) do
     t.text     "question_text_old",          limit: 65535
     t.integer  "source_id",                  limit: 4
     t.integer  "question_style_id",          limit: 4
+    t.integer  "worksheet_sequence_no",      limit: 4
   end
 
   add_index "short_choice_questions", ["chapter_id"], name: "index_short_choice_questions_on_chapter_id", using: :btree
@@ -469,6 +471,17 @@ ActiveRecord::Schema.define(version: 20170424182059) do
   add_index "worksheet_difficulty_levels", ["difficulty_level_id"], name: "index_worksheet_difficulty_levels_on_difficulty_level_id", using: :btree
   add_index "worksheet_difficulty_levels", ["worksheet_id"], name: "index_worksheet_difficulty_levels_on_worksheet_id", using: :btree
 
+  create_table "worksheet_questions", force: :cascade do |t|
+    t.integer  "question_id",   limit: 4
+    t.string   "question_type", limit: 255
+    t.integer  "sequence_no",   limit: 4
+    t.integer  "worksheet_id",  limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "worksheet_questions", ["worksheet_id"], name: "index_worksheet_questions_on_worksheet_id", using: :btree
+
   create_table "worksheet_scqs", force: :cascade do |t|
     t.integer  "short_choice_question_id", limit: 4
     t.integer  "position",                 limit: 4
@@ -520,6 +533,7 @@ ActiveRecord::Schema.define(version: 20170424182059) do
   add_foreign_key "user_worksheet_attempt_scq_scas", "user_worksheet_attempt_scqs"
   add_foreign_key "user_worksheet_attempt_scqs", "short_choice_questions"
   add_foreign_key "user_worksheet_attempt_scqs", "user_worksheet_attempts"
+  add_foreign_key "worksheet_questions", "worksheets"
   add_foreign_key "worksheets", "question_styles"
   add_foreign_key "worksheets", "sub_topics"
 end
