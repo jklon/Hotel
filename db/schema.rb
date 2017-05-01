@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425061238) do
+ActiveRecord::Schema.define(version: 20170430110009) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(version: 20170425061238) do
     t.string   "image",                    limit: 255
     t.text     "answer_text_old",          limit: 65535
     t.integer  "correct_order",            limit: 4
+    t.integer  "correct_multiple",         limit: 4
   end
 
   add_index "short_choice_answers", ["short_choice_question_id"], name: "index_short_choice_answers_on_short_choice_question_id", using: :btree
@@ -241,7 +242,7 @@ ActiveRecord::Schema.define(version: 20170425061238) do
     t.text     "reason",                     limit: 65535
     t.string   "hint_image",                 limit: 255
     t.boolean  "multiple_correct"
-    t.string   "question_style",             limit: 255
+    t.string   "question_style_old",         limit: 255
     t.integer  "level",                      limit: 4
     t.boolean  "answer_available"
     t.text     "answer",                     limit: 65535

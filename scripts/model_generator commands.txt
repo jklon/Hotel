@@ -65,3 +65,8 @@ rails generate migration add_correct_order_to_short_choice_answers correct_order
 add_column :short_choice_questions, ,:correct_order, :integer
 
 rails generate migration add_worksheet_sequence_no_to_short_choice_questions worksheet_sequence_no:integer
+
+rails generate model worksheet_test_question question_id:integer question_type:string sequence_no:integer worksheet:references
+
+rails generate migration add_correct_multiple_to_short_choice_answers correct_multiple:integer
+add_column :short_choice_questions, ,:correct_multiple, :integer
